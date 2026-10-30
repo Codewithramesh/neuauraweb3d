@@ -20,11 +20,13 @@ import { useExperienceMotion } from "./hooks/useExperienceMotion";
 import type { WorkspaceTab } from "./content/demo";
 export default function App() {
   const [view, setView] = useState<WorkspaceTab>("Overview"),
-    [selectedId, setSelectedId] = useState("northstar-01");
+    [selectedId, setSelectedId] = useState("northstar-01"),
+    [workspaceFilter, setWorkspaceFilter] = useState("All workflows");
   useExperienceMotion();
   function openRecord(tab: WorkspaceTab, id: string) {
     setView(tab);
     setSelectedId(id);
+    setWorkspaceFilter("All workflows");
   }
   return (
     <>
@@ -33,11 +35,13 @@ export default function App() {
       </a>
       <Navbar />
       <main id="main">
-        <BusinessHero />
+        <BusinessHero onExplore={() => openRecord("Overview", selectedId)} />
         <BusinessProblem />
-        <ConversationWorkflow />
+        <ConversationWorkflow onOpen={openRecord} />
         <RelationshipGraph onOpen={openRecord} />
         <ConversationWorkspace
+          filter={workspaceFilter}
+          onFilter={setWorkspaceFilter}
           view={view}
           onView={setView}
           selectedId={selectedId}

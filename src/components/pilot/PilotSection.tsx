@@ -83,15 +83,16 @@ export default function PilotSection() {
             <span className="status-dot" /> BUILD WITH US
           </div>
           <h2 id="pilot-heading">
-            Let’s build a more
+            Bring your business
             <br />
-            intelligent way
+            closer to
             <br />
-            to work<span className="teal">.</span>
+            the customer<span className="teal">.</span>
           </h2>
           <p>
             NEUAURA is seeking a small number of B2B organisations willing to
-            validate a focused business conversation intelligence workflow.
+            validate how customer interactions become useful business
+            intelligence for their teams and owners.
           </p>
           <div className="pilot-structure">
             <span>PROPOSED PILOT STRUCTURE</span>
@@ -194,7 +195,7 @@ export default function PilotSection() {
               <textarea
                 name="workflow"
                 rows={2}
-                placeholder="e.g. Customer visit → proposal review → follow-up"
+                placeholder="e.g. Customer visit → customer needs → BMS context"
                 required
                 minLength={10}
                 maxLength={1500}
@@ -205,7 +206,7 @@ export default function PilotSection() {
               <textarea
                 name="message"
                 rows={3}
-                placeholder="What would you like to validate with your team?"
+                placeholder="What customer context is missing from your business systems?"
                 required
                 minLength={10}
                 maxLength={3000}

@@ -19,7 +19,7 @@ export interface Interaction {
   id: string;
   title: string;
   date: string;
-  kind: "Field sales" | "Business development";
+  kind: "Field sales" | "Business development" | "Service & operations";
   person: string;
   organisation: string;
   role: string;
@@ -44,7 +44,7 @@ export interface Commitment {
 export const initialInteractions: Interaction[] = [
   {
     id: "northstar-01",
-    title: "Northstar · Customer meeting",
+    title: "Northstar · Customer visit",
     date: "23 Oct 2026",
     kind: "Field sales",
     person: "Arjun Mehta",
@@ -54,22 +54,22 @@ export const initialInteractions: Interaction[] = [
     transcript: [
       {
         speaker: "Arjun Mehta",
-        text: "We would like the updated proposal and product specifications before the next review.",
+        text: "We need an updated proposal and product specifications to plan our next purchase.",
       },
       {
         speaker: "Demo representative",
-        text: "I can share a revised scope by Friday, after our internal approval.",
+        text: "I can share the revised scope and product specifications by Friday.",
       },
       {
         speaker: "Arjun Mehta",
-        text: "The implementation timeline still needs clarification. Let’s review the revised proposal first.",
+        text: "The implementation timeline is unclear. Please include a delivery schedule in the revised proposal.",
       },
     ],
     summary:
-      "Arjun requested an updated proposal and product specifications. The implementation timeline needs clarification. The next step is to review a revised proposal.",
+      "Arjun needs product specifications and a revised proposal to plan the next purchase. The implementation timeline remains unclear; a delivery schedule would help.",
     needs: "Updated proposal and product specifications.",
     objection: "Implementation timeline needs clarification.",
-    decision: "Review the revised proposal.",
+    decision: "Include a delivery schedule in the revised proposal.",
     reviewed: false,
   },
   {
@@ -102,6 +102,37 @@ export const initialInteractions: Interaction[] = [
     decision: "Review a partnership outline before the next discussion.",
     reviewed: false,
   },
+  {
+    id: "service-03",
+    title: "Cedarfield · Service visit",
+    date: "24 Oct 2026",
+    kind: "Service & operations",
+    person: "Priya Sen",
+    organisation: "Cedarfield Services",
+    role: "Operations contact · fictional",
+    initials: "PS",
+    transcript: [
+      {
+        speaker: "Priya Sen",
+        text: "We need a service plan for the equipment at our two customer sites.",
+      },
+      {
+        speaker: "Demo representative",
+        text: "I will prepare service options and an escalation contact by Monday.",
+      },
+      {
+        speaker: "Priya Sen",
+        text: "Response times have been unclear. Please include a written support schedule.",
+      },
+    ],
+    summary:
+      "Priya requested a service plan across two customer sites. Unclear response times are an open concern. Service options, a support schedule and an escalation contact would help.",
+    needs:
+      "A service plan for two customer sites and a written support schedule.",
+    objection: "Service response times and escalation contacts are unclear.",
+    decision: "Compare service options with a written support schedule.",
+    reviewed: false,
+  },
 ];
 export const initialCommitments: Commitment[] = [
   {
@@ -112,7 +143,8 @@ export const initialCommitments: Commitment[] = [
     deadline: "Friday · sample deadline",
     confirmed: false,
     completed: false,
-    followUp: "Prepare and send the updated proposal after approval.",
+    followUp:
+      "Prepare an updated proposal with specifications and a delivery schedule.",
   },
   {
     id: "commitment-02",
@@ -125,8 +157,21 @@ export const initialCommitments: Commitment[] = [
     followUp:
       "Prepare a partnership outline for review before the next discussion.",
   },
+  {
+    id: "commitment-03",
+    interactionId: "service-03",
+    action: "Prepare service options and escalation contact",
+    owner: "Demo representative",
+    deadline: "Monday · sample deadline",
+    confirmed: false,
+    completed: false,
+    followUp:
+      "Prepare service options and a written support schedule for the customer.",
+  },
 ];
 export const sampleQueries = [
+  "What are customers asking for?",
+  "Which customer concerns are open?",
   "What did this customer request last time?",
   "Which commitments are pending?",
   "Show decisions related to the revised proposal.",
@@ -148,7 +193,7 @@ export const graphEntities: GraphEntity[] = [
     type: "PERSON",
     title: "Arjun Mehta",
     description:
-      "A fictional contact linked to a confirmed organisation and a sample customer meeting.",
+      "A fictional contact linked to a confirmed organisation and a sample customer visit.",
     recordId: "northstar-01",
     tab: "People",
     x: 19,
@@ -168,7 +213,7 @@ export const graphEntities: GraphEntity[] = [
   {
     id: "interaction",
     type: "INTERACTION",
-    title: "Customer meeting",
+    title: "Customer visit",
     description:
       "The source interaction connects the person, organisation and extracted business context. Open it to review the illustrative transcript.",
     recordId: "northstar-01",
@@ -201,9 +246,9 @@ export const graphEntities: GraphEntity[] = [
   {
     id: "decision",
     type: "DECISION",
-    title: "Review the revised proposal",
+    title: "Include a delivery schedule",
     description:
-      "A proposed decision extracted from the sample meeting, available for verification and correction.",
+      "A delivery schedule requested in the fictional customer visit, linked to the original source and available for correction.",
     recordId: "northstar-01",
     tab: "Interactions",
     x: 78,
@@ -234,9 +279,9 @@ export const graphEntities: GraphEntity[] = [
   {
     id: "followup",
     type: "FOLLOW-UP ACTION",
-    title: "Prepare proposal after approval",
+    title: "Updated proposal & schedule",
     description:
-      "Prepare and send the updated proposal after approval. Review extracted context and confirm any consequential action first.",
+      "Prepare an updated proposal with specifications and a delivery schedule. Review extracted context and confirm any consequential action first.",
     recordId: "northstar-01",
     tab: "Follow-ups",
     x: 45,

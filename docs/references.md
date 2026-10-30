@@ -1,6 +1,6 @@
 # NEUAURA V1 reference study
 
-The supplied V1 brief is the product source. The separately named primary overview was not found in local attachments or connected Drive search. Founder copy, email, market focus, planned capabilities and status language follow the brief. No founder portrait was supplied or invented.
+The supplied NEUAURA_B2B_Wearable_Project_Overview is the product source. The founder’s latest instruction makes business intelligence, customer relationships, background processing and the BMS architecture the main story. Product review and consequential-action confirmation remain supporting controls. The original founder note and correct direct contact remain intact. No founder portrait was supplied or invented.
 
 Design references reviewed 30 October 2026:
 

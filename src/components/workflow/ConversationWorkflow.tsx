@@ -1,104 +1,124 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
   AudioLines,
-  CheckCheck,
-  FileText,
+  Building2,
+  Check,
+  ChevronRight,
+  Cpu,
+  Download,
   Layers3,
-  ListChecks,
   Network,
+  Play,
+  RotateCcw,
   ShieldCheck,
+  Users,
 } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { workflow } from "../../content/site";
+import {
+  initialInteractions,
+  initialCommitments,
+  type WorkspaceTab,
+} from "../../content/demo";
+import { architectureLayers } from "../../content/architecture";
+import { buildBusinessContext } from "../../lib/intelligence";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { SectionLabel, SampleLabel } from "../ui/Primitives";
-gsap.registerPlugin(ScrollTrigger);
-const icons = [AudioLines, FileText, Layers3, ShieldCheck, Network, ListChecks];
-export default function ConversationWorkflow() {
-  const [active, setActive] = useState(0),
-    root = useRef<HTMLElement>(null),
-    manual = useRef(false),
-    reduce = useReducedMotion(),
-    mobile = useMediaQuery("(max-width: 800px)");
+import { SampleLabel, SectionLabel } from "../ui/Primitives";
+const icons = [Users, ShieldCheck, Cpu, Network, Layers3, Building2];
+export default function ConversationWorkflow({
+  onOpen,
+}: {
+  onOpen: (tab: WorkspaceTab, id: string) => void;
+}) {
+  const [recordId, setRecordId] = useState("northstar-01"),
+    [layer, setLayer] = useState(0),
+    [step, setStep] = useState(-1),
+    [showPayload, setShowPayload] = useState(false);
+  const reduced = useReducedMotion(),
+    running = step >= 0 && step < 5,
+    complete = step === 5,
+    active = running ? step : layer;
+  const record = initialInteractions.find((r) => r.id === recordId)!,
+    context = buildBusinessContext(record, initialCommitments),
+    current = architectureLayers[active],
+    Icon = icons[active];
   useEffect(() => {
-    if (reduce || mobile) return;
-    const t = ScrollTrigger.create({
-      trigger: root.current,
-      start: "top center",
-      end: "bottom center",
-      onUpdate: (self) => {
-        if (!manual.current)
-          setActive(Math.min(5, Math.floor(self.progress * 6)));
-      },
-    });
-    const release = () => {
-      manual.current = false;
-    };
-    window.addEventListener("wheel", release, { passive: true });
-    return () => {
-      t.kill();
-      window.removeEventListener("wheel", release);
-    };
-  }, [reduce, mobile]);
-  const Icon = icons[active],
-    step = workflow[active];
+    if (!running) return;
+    const timer = window.setTimeout(
+      () => setStep((n) => n + 1),
+      reduced ? 80 : 520,
+    );
+    return () => window.clearTimeout(timer);
+  }, [running, step, reduced]);
+  function run() {
+    setShowPayload(false);
+    setLayer(5);
+    setStep(0);
+  }
+  function download() {
+    const blob = new Blob([JSON.stringify(context, null, 2)], {
+        type: "application/json",
+      }),
+      url = URL.createObjectURL(blob),
+      a = document.createElement("a");
+    a.href = url;
+    a.download = `neuaura-${record.id}-context-preview.json`;
+    a.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
   return (
     <section
-      className="workflow-section section-wrap"
+      className="workflow-section section-wrap architecture-section"
       id="platform"
-      ref={root}
       aria-labelledby="workflow-heading"
     >
-      <SectionLabel number="02" right="SOFTWARE-FIRST BY DESIGN">
-        THE PLATFORM
+      <span id="architecture" className="anchor-alias" />
+      <SectionLabel number="02" right="THE CORE NEUAURA ARCHITECTURE">
+        THE BUSINESS INTELLIGENCE LAYER
       </SectionLabel>
       <div className="split-heading">
         <h2 id="workflow-heading">
-          From conversation
+          From the customer.
           <br />
-          to business action<span className="teal">.</span>
+          <span className="muted">Into business understanding.</span>
         </h2>
         <p>
-          The initial MVP can use approved phones, laptops and compatible
-          capture devices. The value begins in the intelligence layer.
+          Customer interaction → consented capture → background processing →
+          connected context. An intelligence layer designed to keep owners and
+          their business systems connected to what is happening outside the
+          dashboard.
         </p>
       </div>
       <div
-        className="workflow-tabs"
+        className="architecture-flow"
         role="tablist"
-        aria-label="Conversation to action workflow"
+        aria-label="NEUAURA architecture layers"
       >
-        {workflow.map((s, i) => {
+        {architectureLayers.map((l, i) => {
           const I = icons[i];
           return (
             <button
-              key={s.name}
-              id={`flow-tab-${i}`}
+              id={`architecture-tab-${i}`}
+              key={l.name}
               role="tab"
+              aria-controls="architecture-detail"
               aria-selected={active === i}
-              aria-controls="flow-panel"
               tabIndex={active === i ? 0 : -1}
-              onClick={() => {
-                manual.current = true;
-                setActive(i);
-              }}
+              disabled={running}
+              onClick={() => setLayer(i)}
               onKeyDown={(e) => {
                 if (
                   [
                     "ArrowRight",
-                    "ArrowDown",
                     "ArrowLeft",
+                    "ArrowDown",
                     "ArrowUp",
                     "Home",
                     "End",
                   ].includes(e.key)
                 ) {
                   e.preventDefault();
-                  const next =
+                  const n =
                     e.key === "Home"
                       ? 0
                       : e.key === "End"
@@ -108,117 +128,189 @@ export default function ConversationWorkflow() {
                               ? 1
                               : 5)) %
                           6;
-                  manual.current = true;
-                  setActive(next);
-                  document.getElementById(`flow-tab-${next}`)?.focus();
+                  setLayer(n);
+                  document.getElementById(`architecture-tab-${n}`)?.focus();
                 }
               }}
             >
               <span>
                 0{i + 1}
-                <I size={20} />
+                <I size={21} />
               </span>
-              <strong>{s.name}</strong>
-              <i />
+              <strong>{l.name}</strong>
+              <small>{l.label}</small>
+              {i < 5 && (
+                <ChevronRight className="architecture-next" size={14} />
+              )}
             </button>
           );
         })}
       </div>
-      <div
-        className="workflow-panel"
-        id="flow-panel"
-        role="tabpanel"
-        aria-labelledby={`flow-tab-${active}`}
-      >
-        <div className="workflow-copy">
+      <div className="architecture-workbench">
+        <div
+          className="architecture-inspector"
+          id="architecture-detail"
+          role="tabpanel"
+          aria-labelledby={`architecture-tab-${active}`}
+        >
           <span className="eyebrow">
-            0{active + 1} / {step.name.toUpperCase()}
+            <Icon size={16} /> LAYER 0{active + 1} / {current.label}
           </span>
-          <h3>{step.title}</h3>
-          <p>{step.description}</p>
-          <p className="workflow-detail">{step.detail}</p>
-          <a href="#workspace" className="text-link">
-            Try the workspace <ArrowUpRight size={14} />
-          </a>
+          <h3>{current.title}</h3>
+          <p>{current.description}</p>
+          <ul>
+            {current.details.map((x) => (
+              <li key={x}>
+                <span />
+                {x}
+              </li>
+            ))}
+          </ul>
+          <div className="architecture-scope">
+            <span className="status-dot" />
+            {current.scope}
+          </div>
         </div>
-        <div className="workflow-visual" key={active}>
-          <div className="workflow-visual-top">
-            <Icon size={20} />
-            <span>{step.name.toUpperCase()} / CONCEPT</span>
+        <div className="architecture-simulation">
+          <div className="architecture-demo-top">
+            <span>
+              <AudioLines size={14} /> FOLLOW ONE CUSTOMER SIGNAL
+            </span>
             <SampleLabel short />
           </div>
-          {active === 0 ? (
-            <div className="waveform" aria-label="Illustrative audio waveform">
-              {Array.from({ length: 39 }, (_, i) => (
-                <i
-                  key={i}
-                  style={{
-                    height: 12 + ((i * 17) % 61),
-                    animationDelay: `${i * 0.045}s`,
-                  }}
-                />
+          <label className="architecture-input-label">
+            Example business workflow
+            <select
+              aria-label="Architecture sample workflow"
+              value={recordId}
+              disabled={running}
+              onChange={(e) => {
+                setRecordId(e.target.value);
+                setStep(-1);
+                setShowPayload(false);
+              }}
+            >
+              {initialInteractions.map((r) => (
+                <option value={r.id} key={r.id}>
+                  {r.kind} / {r.organisation}
+                </option>
               ))}
+            </select>
+          </label>
+          <blockquote>
+            <span>FICTIONAL, PERMITTED INPUT</span>“{record.transcript[0].text}”
+            <cite>
+              {record.person} · {record.organisation}
+            </cite>
+          </blockquote>
+          <div className="background-process" aria-live="polite">
+            <div>
+              <span
+                className={running ? "status-dot processing" : "status-dot"}
+              />
+              <strong>
+                {running
+                  ? `Processing sample / ${["Ingesting permitted input", "Transcribing sample input", "Extracting business context", "Connecting the relationship", "Structuring the record", "Preparing the owner view"][step]}`
+                  : complete
+                    ? "Structured business context is ready"
+                    : "A conversation, ready to become context"}
+              </strong>
             </div>
-          ) : active === 1 ? (
-            <div className="transcript-example">
-              <span>ARJUN MEHTA / SAMPLE</span>
-              <p>{step.example}</p>
-              <div className="transcript-lines">
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-          ) : active === 2 ? (
-            <div className="extraction-example">
+            <ol>
               {[
-                "Person / Arjun Mehta",
-                "Organisation / Northstar Components",
-                "Need / Updated proposal",
-                "Deadline / Friday",
-              ].map((x) => (
-                <span key={x}>
-                  <i />
-                  {x}
-                </span>
+                "Ingest",
+                "Transcribe",
+                "Extract",
+                "Connect",
+                "Structure",
+                "Inform",
+              ].map((s, i) => (
+                <li key={s} className={step >= i ? "done" : ""}>
+                  <span>{step >= i ? <Check size={10} /> : i + 1}</span>
+                  {s}
+                </li>
               ))}
-            </div>
-          ) : active === 3 ? (
-            <div className="review-example">
-              <ShieldCheck size={35} />
-              <strong>Suggested, then verified.</strong>
-              <span>Correct the context. Confirm the record.</span>
-              <a href="#workspace">
-                Open the review demo <ArrowRight size={14} />
-              </a>
-            </div>
-          ) : active === 4 ? (
-            <div className="connection-example">
-              <span>Arjun Mehta</span>
-              <i />
-              <Network size={36} />
-              <i />
-              <span>Northstar Components</span>
-            </div>
-          ) : (
-            <div className="followup-example">
-              <CheckCheck size={24} />
-              <div>
-                <strong>Prepare the revised proposal</strong>
-                <span>Awaiting review and confirmation</span>
+            </ol>
+          </div>
+          {complete && (
+            <div className="architecture-output">
+              <span className="eyebrow">BUSINESS CONTEXT / DRAFT SAMPLE</span>
+              <dl>
+                <div>
+                  <dt>Customer need</dt>
+                  <dd>{context.context.customerNeed}</dd>
+                </div>
+                <div>
+                  <dt>Open concern</dt>
+                  <dd>{context.context.openConcern}</dd>
+                </div>
+                <div>
+                  <dt>Connected relationship</dt>
+                  <dd>
+                    {record.person} → {record.organisation}
+                  </dd>
+                </div>
+              </dl>
+              <div className="architecture-output-actions">
+                <button
+                  onClick={() => setShowPayload(!showPayload)}
+                  aria-expanded={showPayload}
+                >
+                  {showPayload ? "Hide BMS context" : "Inspect BMS context"}
+                  <ChevronRight size={13} />
+                </button>
+                <button onClick={download}>
+                  <Download size={13} /> Download sample JSON
+                </button>
               </div>
-              <span className="state-pill">PROPOSED</span>
+              {showPayload && (
+                <pre
+                  className="architecture-json"
+                  aria-label="Draft BMS context payload"
+                >
+                  {JSON.stringify(context, null, 2)}
+                </pre>
+              )}
             </div>
           )}
-          <div className="workflow-example-bottom">
-            <span>
-              {active === 1
-                ? "A permitted conversation, made readable."
-                : step.example}
-            </span>
-            <ArrowRight size={15} />
+          <div className="architecture-run-row">
+            <button
+              className="small-button primary"
+              disabled={running}
+              onClick={run}
+            >
+              {complete ? <RotateCcw size={14} /> : <Play size={13} />}{" "}
+              {running
+                ? "Processing fictional input…"
+                : complete
+                  ? "Run sample again"
+                  : "Process sample interaction"}
+            </button>
+            {complete && (
+              <a href="#workspace" onClick={() => onOpen("Overview", recordId)}>
+                Explore the owner view <ArrowUpRight size={13} />
+              </a>
+            )}
           </div>
+          <p className="architecture-local-note">
+            Local simulation using predefined fictional records. No audio, AI
+            service or business system is connected. Review and correction
+            remain available before shared records or external actions.
+          </p>
         </div>
+      </div>
+      <div className="architecture-bottom">
+        <div>
+          <span>ONE SHARED INTELLIGENCE LAYER</span>
+          <p>
+            Adapt the customer context to the workflow: sales, account
+            relationships, partnerships or service operations. Validate each use
+            case before rollout.
+          </p>
+        </div>
+        <a href="#integrations" className="text-link">
+          How BMS connectivity evolves <ArrowRight size={14} />
+        </a>
       </div>
     </section>
   );

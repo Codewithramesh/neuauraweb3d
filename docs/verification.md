@@ -1,33 +1,34 @@
-# NEUAURA V1 verification — 30 October 2026
+# NEUAURA business intelligence revision verification
 
-The website was inspected in the Codex in-app browser against the local Vite app at desktop 1440 × 1000, tablet 768 × 1024 and mobile 390 × 844.
+Verified 30 October 2026 after reading the supplied project overview and implementing the founder’s updated direction.
 
-## Observed working
+## Browser checks
 
-- Software-first hero, 13 main sections plus footer, valid internal anchors, correct metadata and five correct founder email links.
-- All six workflow tabs, keyboard progression, all nine relationship graph nodes, connected context inspection and graph-to-workspace selection. Mobile graph selector opens the same entities.
-- All seven workspace views. Source transcript inspection, context correction, explicit review checkbox, saved reviewed state and review gate on sharing/commitment confirmation.
-- Sharing confirmation opens, cancels and explicitly confirms a simulation. No external information is sent.
-- Reviewed source enables commitment confirmation. Confirmed commitments enable a suggested follow-up, editable draft and separate confirmation. Completed simulated follow-ups disappear from pending search results.
-- Search resolves customer requirements, pending commitments, revised-proposal decisions and the last interaction for the selected organisation. Edits are reflected. Unknown queries produce an empty state.
-- Workflow filter selects the matching fictional organisation; commitment status filtering and clear filter work. Reset restores the sample. Export produces local fictional JSON.
-- Consent required before starting; active, pause, resume and stopped states work. Context can be edited, reviewed and shared only through a separate confirmation.
-- Pendant/wristband selection, mechanical stage selection, automatic rotation, reset, material details, expansion and Escape dismissal. Mobile uses tap stages. Reduced motion disables automatic rotation and makes transitions immediate.
-- Pilot required-field validity, valid fictional input, honest unsent state, populated founder email draft link and downloaded text containing all seven submitted fields. The email link was inspected without sending a message.
-- Founder note and correct direct `mailto:mukkararamesh2005@gmail.com` link, with optional subject on appropriate contact links.
-- Mobile navigation and workspace navigation. No page overflow or out-of-bounds controls/headings at tested mobile dimensions. Expanded viewer horizontal overflow was found and fixed. Technical labels were enlarged.
-- Browser console inspected with no errors or warnings from the app in the final fresh-load check.
+The revised local site was tested in the Codex in-app browser at desktop 1440 × 1000, tablet 768 × 1024 and mobile 390 × 844.
+
+- All six architecture tabs select the correct layer. Keyboard progression works.
+- Sales, partnership and service samples complete the local processing sequence. Each produces its own customer need, open concern, relationship and source-linked structured output. Changing the workflow clears prior output.
+- The BMS preview opens and closes. Downloaded JSON was inspected: the service payload contains the correct customer, only that customer’s commitment, a draft record state and a preview-only destination. No BMS transmission occurs.
+- The owner overview shows needs, concerns and relationship updates for the fictional records. Service workflow filtering produces only the service customer. A need opens the correct source interaction.
+- Search returns all three customer requirements and respects the selected workflow for concerns. Unknown queries retain the empty-results state.
+- A source correction saved in the interaction appears in the owner overview with its reviewed state.
+- Owner-view links open Overview and reset stale workflow filters. Business use-case links also reset stale filters.
+- Mobile navigation, workspace navigation, architecture selection, sample processing, owner view and search work. Reduced motion accelerates the finite simulation and preserves its complete output.
+- No page overflow or out-of-bounds headings were found at tested mobile/tablet dimensions. The graph and commitment table retain their intentional horizontal scroll regions.
+- The retained 3D explorer switches to the wristband, expands within tablet bounds and closes with Escape. The shared-core geometry is unchanged.
+
+The final fresh-load browser console was clear. All internal anchor targets resolved, the page contained 13 main sections plus the footer, and all founder email destinations were correct.
 
 ## Automated checks
 
-`npm run lint`, `npm run typecheck`, `npm run test:model`, `npm run test:demo`, and `npm run build` passed.
+The final source passed `npm run lint`, `npm run typecheck`, `npm run test:model`, `npm run test:demo`, `npm run test:intelligence`, and `npm run build`.
 
-The model test exercises 101 poses, stable core and child mesh identity, fixed dimensions, linear release, wrist alignment and the final single-core/two-cradle composition. The demo test exercises real fixture queries, edited values, selected context, empty results, completed actions and review gating.
+The demo checks cover all six queries, selected relationships, edits, empty results, completed actions and review gating. Intelligence checks cover three workflows, source-linked needs and concerns, customer-isolated commitments, record state and preview-only BMS output. Model checks cover 101 mechanical poses and stable single-core identity.
 
-The production build emits Vite's advisory about the lazy-loaded Three.js engine chunk exceeding 500 kB. The main application and product canvas are separately split; the engine is approximately 188 kB compressed. No build errors occurred.
+The Three.js engine remains lazy-loaded and separately split. Vite’s advisory about its uncompressed chunk size is informational; the engine is approximately 188 kB compressed.
 
-## Boundaries
+## Scope
 
-This verifies a browser-local product demonstration. No real recordings, AI backend, external integration or enquiry delivery service are connected. The form prepares a draft. Product models are provisional original geometry, with no physical fit or manufacturing validation. The named primary overview and final production GLBs were not available; the supplied V1 brief defines the implemented scope.
+This is a website and browser-local product demonstration. There is no actual audio capture, AI inference, background processing service, CRM/BMS connection or live monitoring. Advanced team analytics are later scope. The form prepares an unsent enquiry draft unless an accepted delivery endpoint is configured. The pendant and wristband are original provisional industrial design concepts.
 
-Screenshots are in the ignored `artifacts/` directory and are not included in the deployed static output.
+The founder note, correct email links, native pilot form validation, consent controls and confirmation gates are preserved. The product overview supplies context; it does not override the founder’s current instruction to make business intelligence the main website narrative.

@@ -29,16 +29,19 @@ assert.equal(
 );
 assert.equal(searchDemo(records, commitments, "", "northstar-01").length, 0);
 assert(
-  searchDemo(records, commitments, sampleQueries[0], "meridian-02").every(
-    (r) => r.recordId === "meridian-02",
-  ),
+  searchDemo(
+    records,
+    commitments,
+    "What did this customer request last time?",
+    "meridian-02",
+  ).every((r) => r.recordId === "meridian-02"),
   "Selected relationship scopes customer context",
 );
 assert.equal(
   searchDemo(
     records,
     commitments.map((c) => ({ ...c, completed: true })),
-    sampleQueries[1],
+    "Which commitments are pending?",
     "northstar-01",
   ).length,
   0,
@@ -67,5 +70,5 @@ assert.equal(
   "Human review opens the confirmation gate",
 );
 console.log(
-  "PASS · all four sample queries · record scope · empty search · edited context · pending completion · review gate",
+  "PASS · all six sample queries · record scope · empty search · edited context · pending completion · review gate",
 );

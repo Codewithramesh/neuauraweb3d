@@ -10,7 +10,8 @@
     "typecheck": "tsc -b --pretty false",
     "test:model": "node scripts/verify-model.mjs",
     "lint": "eslint .",
-    "test:demo": "node scripts/verify-demo.mjs"
+    "test:demo": "node scripts/verify-demo.mjs",
+    "test:intelligence": "node scripts/verify-intelligence.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",

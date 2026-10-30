@@ -15,7 +15,7 @@ export default function Footer() {
             <br />
             Relationship Layer.
           </p>
-          <span>Business Conversation Intelligence.</span>
+          <span>Business intelligence. Connected to the customer.</span>
         </div>
         <nav aria-label="Footer navigation">
           {[...navigation, { label: "Pilot programme", href: "#pilot" }].map(
@@ -55,7 +55,7 @@ export default function Footer() {
       </p>
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} NEUAURA</span>
-        <span>PERMISSION. CONTEXT. REVIEW. FOLLOW-THROUGH.</span>
+        <span>CUSTOMER. CONSENT. CONTEXT. BUSINESS INTELLIGENCE.</span>
         <a href="#home">BACK TO TOP ↑</a>
       </div>
     </footer>

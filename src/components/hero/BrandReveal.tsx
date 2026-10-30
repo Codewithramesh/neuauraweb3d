@@ -18,9 +18,9 @@ export default function BrandReveal() {
             <i />
             <span>CONTEXT</span>
             <Network size={21} />
-            <span>COMMITMENT</span>
+            <span>INTELLIGENCE</span>
             <i />
-            <span>ACTION</span>
+            <span>BMS</span>
           </div>
           <ProductVisual
             motion={motion}
@@ -35,15 +35,16 @@ export default function BrandReveal() {
         <div className="reveal-copy">
           <span className="brand-wordmark">NEUAURA</span>
           <h2 id="brand-reveal-heading">
-            Don’t just capture
+            Keep your business
             <br />
-            the conversation.
+            connected to
             <br />
-            <span>Make it count.</span>
+            <span>the customer.</span>
           </h2>
           <p>
-            Transform consented real-world business interactions into structured
-            context, relationship intelligence and meaningful follow-through.
+            From consented customer interactions to structured context. One
+            NEUAURA intelligence layer for the owner’s view, the team’s
+            relationships and the business systems that connect them.
           </p>
           <div>
             <a className="button button-primary" href="#pilot">

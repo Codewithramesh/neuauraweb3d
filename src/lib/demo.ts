@@ -17,9 +17,30 @@ export function searchDemo(
   if (!q) return [];
   const selected = records.find((r) => r.id === selectedId) || records[0];
   const results: SearchResult[] = [];
+  if (
+    /customers.*(ask|need)|customer (needs|requirements)|business needs/.test(q)
+  )
+    return records.map((r) => ({
+      id: `${r.id}-needs`,
+      type: "CUSTOMER NEED",
+      title: r.organisation,
+      text: r.needs,
+      recordId: r.id,
+      tab: "Interactions",
+    }));
+  if (/concern|objection/.test(q))
+    return records.map((r) => ({
+      id: `${r.id}-concern`,
+      type: "OPEN CONCERN",
+      title: r.organisation,
+      text: r.objection,
+      recordId: r.id,
+      tab: "Interactions",
+    }));
   if (/commitment|pending|follow.up/.test(q)) {
     for (const c of commitments.filter((c) => !c.completed)) {
-      const record = records.find((r) => r.id === c.interactionId)!;
+      const record = records.find((r) => r.id === c.interactionId);
+      if (!record) continue;
       results.push({
         id: c.id,
         type: "PENDING COMMITMENT",

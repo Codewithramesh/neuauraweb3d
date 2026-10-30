@@ -55,13 +55,14 @@ export default function RelationshipGraph({
       </SectionLabel>
       <div className="split-heading">
         <h2 id="relationship-heading">
-          Not just what was said.
+          Every customer interaction.
           <br />
-          <span className="muted">What it means for the business.</span>
+          <span className="muted">Part of the business picture.</span>
         </h2>
         <p>
-          One interaction is part of a bigger relationship. Explore how people,
-          needs, decisions and commitments fit together.
+          Customer intelligence needs continuity. Connect people, organisations,
+          requirements and open concerns to the interactions behind them, so
+          teams and owners can understand the relationship.
         </p>
       </div>
       <div className="graph-toolbar">
@@ -78,6 +79,7 @@ export default function RelationshipGraph({
           >
             <svg
               viewBox="0 0 1000 600"
+              preserveAspectRatio="none"
               className="graph-connections"
               aria-hidden="true"
             >

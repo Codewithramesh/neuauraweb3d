@@ -23,16 +23,16 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { SectionLabel } from "../ui/Primitives";
 const problems = [
   [
-    "Lost customer context",
-    "Requirements and objections fade when the conversation ends.",
+    "Customer needs stay out of sight",
+    "Owners lose visibility when requirements and concerns stay with the person who heard them.",
   ],
   [
-    "Manual documentation",
-    "Notes and CRM updates compete with the next customer interaction.",
+    "Systems miss the real-world picture",
+    "Manual notes and delayed CRM entries leave customer context disconnected from operations.",
   ],
   [
-    "Missed follow-ups",
-    "Verbal commitments need a clear owner and a next step.",
+    "Relationship updates arrive late",
+    "Important changes, objections and customer expectations are hard to track across the team.",
   ],
   [
     "Fragmented relationship history",
@@ -40,12 +40,12 @@ const problems = [
   ],
 ];
 const fragments = [
-  { name: "Meeting notes", icon: FileText },
+  { name: "Customer conversations", icon: FileText },
   { name: "Customer needs", icon: Target },
   { name: "Email messages", icon: Mail },
   { name: "CRM entries", icon: Building2 },
-  { name: "Verbal commitments", icon: MessageSquare },
-  { name: "Follow-up tasks", icon: CheckCheck },
+  { name: "Customer concerns", icon: MessageSquare },
+  { name: "Service discussions", icon: CheckCheck },
   { name: "Calendar events", icon: CalendarDays },
 ];
 export function BusinessProblem() {
@@ -74,13 +74,14 @@ export function BusinessProblem() {
         </SectionLabel>
         <div className="split-heading">
           <h2 id="problem-heading">
-            Important conversations.
+            Customer conversations.
             <br />
-            <span>Forgotten commitments.</span>
+            <span>Business blind spots.</span>
           </h2>
           <p>
-            Customer visits. Sales calls. Partnership discussions. The
-            information matters. The places it ends up rarely connect.
+            What customers need, what concerns them and how a relationship is
+            developing can remain scattered across people, notes and systems.
+            The business needs that context.
           </p>
         </div>
         <div className="problem-layout">
@@ -162,19 +163,21 @@ export function BusinessUseCases({
       <div className="section-wrap">
         <SectionLabel
           number="05"
-          right="FIELD SALES & BUSINESS DEVELOPMENT FIRST"
+          right="COMMON ARCHITECTURE / WORKFLOW-SPECIFIC VALIDATION"
         >
-          BUILT FOR THE CONVERSATION
+          DESIGNED AROUND YOUR BUSINESS
         </SectionLabel>
         <div className="split-heading">
           <h2 id="usecases-heading">
-            Built around real
+            One intelligence layer.
             <br />
-            business conversations.
+            Different business workflows.
           </h2>
           <p>
-            A focused entry point: teams whose most important business context
-            is created between people, in the field.
+            The same customer-to-context architecture can support different
+            teams. We begin with field sales and business development, then
+            validate account, service and operational workflows with pilot
+            partners.
           </p>
         </div>
         <div className="primary-usecases">
@@ -208,13 +211,10 @@ export function BusinessUseCases({
               <a
                 href="#workspace"
                 onClick={() =>
-                  onOpen(
-                    "Interactions",
-                    i === 0 ? "northstar-01" : "meridian-02",
-                  )
+                  onOpen("Overview", i === 0 ? "northstar-01" : "meridian-02")
                 }
               >
-                Explore a fictional workflow <ArrowUpRight size={14} />
+                Explore the business view <ArrowUpRight size={14} />
               </a>
             </article>
           ))}
@@ -223,7 +223,7 @@ export function BusinessUseCases({
           <article>
             <Users size={23} />
             <div>
-              <span>ADJACENT WORKFLOW</span>
+              <span>ADJACENT APPLICATION</span>
               <h3>Account management</h3>
               <p>
                 Customer interactions, agreed actions, account concerns, renewal
@@ -234,11 +234,12 @@ export function BusinessUseCases({
           <article>
             <Building2 size={23} />
             <div>
-              <span>ADJACENT WORKFLOW</span>
-              <h3>Founders & partnerships</h3>
+              <span>ADJACENT APPLICATION</span>
+              <h3>Service & operations</h3>
               <p>
-                Investor conversations, strategic partnerships, networking,
-                potential customers and commercial commitments.
+                Customer issues, service requirements, field observations and
+                relationship continuity. A potential next workflow, subject to
+                validation.
               </p>
             </div>
           </article>
@@ -253,7 +254,7 @@ const architecture = [
   { title: "Transcription", icon: FileText },
   { title: "AI context extraction", icon: Layers3 },
   { title: "Relationship intelligence", icon: Network },
-  { title: "Human review", icon: Users },
+  { title: "Owner & team workspace", icon: Users },
   { title: "Export & API", icon: ArrowUpRight },
   { title: "Existing business systems", icon: Building2 },
 ];
@@ -269,13 +270,14 @@ export function IntegrationArchitecture() {
       </SectionLabel>
       <div className="split-heading">
         <h2 id="integration-heading">
-          Your business systems.
+          Give your BMS
           <br />
-          <span className="muted">Connected to better context.</span>
+          <span className="muted">the customer context.</span>
         </h2>
         <p>
-          An intelligence layer that complements the systems you already work
-          in. Future connections should follow real pilot demand.
+          A Business Management System knows the operational record. NEUAURA is
+          intended to add the customer needs, open concerns and relationship
+          history behind it, through structured export and future APIs.
         </p>
       </div>
       <ol className="integration-pipeline">
@@ -294,8 +296,8 @@ export function IntegrationArchitecture() {
           {[
             "CRM",
             "Business Management Systems",
-            "Calendar",
-            "Email",
+            "Owner briefings",
+            "Customer service workflows",
             "Task management",
             "Team dashboards",
             "Enterprise workflows",
@@ -309,12 +311,12 @@ export function IntegrationArchitecture() {
           [
             "01",
             "Start with useful records.",
-            "Basic export and searchable records. The workspace demonstrates this with fictional local data.",
+            "Search, customer profiles and basic export. The demo provides fictional structured JSON; it does not connect to a live BMS.",
           ],
           [
             "02",
             "Validate the connections.",
-            "API capabilities and carefully validated workflow integrations.",
+            "API capabilities and validated workflow integrations. Advanced team analytics and configurable workflows remain later scope.",
           ],
           [
             "03",
@@ -420,7 +422,7 @@ export function PilotMetrics() {
 export function ProcessLegend() {
   return (
     <span className="process-legend">
-      <ClipboardList size={13} /> Permission. Context. Review. Follow-through.
+      <ClipboardList size={13} /> Customers. Context. Business intelligence.
       <ArrowDown size={12} />
     </span>
   );

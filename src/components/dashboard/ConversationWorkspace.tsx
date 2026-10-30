@@ -4,12 +4,10 @@ import {
   ArrowUpRight,
   AudioLines,
   Building2,
-  CalendarClock,
   Check,
   CheckCheck,
   ChevronRight,
   Download,
-  History,
   LayoutDashboard,
   ListChecks,
   MessageSquare,
@@ -31,6 +29,7 @@ import {
   type WorkspaceTab,
 } from "../../content/demo";
 import { canConfirm, searchDemo } from "../../lib/demo";
+import BusinessOverview from "./BusinessOverview";
 import { Modal, SampleLabel, SectionLabel } from "../ui/Primitives";
 
 const tabIcons = {
@@ -43,12 +42,16 @@ const tabIcons = {
   Search,
 };
 type Props = {
+  filter: string;
+  onFilter: (filter: string) => void;
   view: WorkspaceTab;
   onView: (view: WorkspaceTab) => void;
   selectedId: string;
   onSelect: (id: string) => void;
 };
 export default function ConversationWorkspace({
+  filter,
+  onFilter: setFilter,
   view,
   onView,
   selectedId,
@@ -60,8 +63,7 @@ export default function ConversationWorkspace({
   const [commitments, setCommitments] = useState(() =>
     initialCommitments.map((c) => ({ ...c })),
   );
-  const [filter, setFilter] = useState("All workflows"),
-    [commitmentFilter, setCommitmentFilter] = useState("All states");
+  const [commitmentFilter, setCommitmentFilter] = useState("All states");
   const [editing, setEditing] = useState(false),
     [subview, setSubview] = useState<"Context" | "Transcript">("Context");
   const [query, setQuery] = useState(""),
@@ -270,13 +272,15 @@ export default function ConversationWorkspace({
       </SectionLabel>
       <div className="split-heading">
         <h2 id="workspace-heading">
-          Your conversations.
-          <br />A clearer picture.
+          Your customers.
+          <br />
+          Your business, connected.
         </h2>
         <div>
           <p>
-            Explore the proposed workflow. Select an interaction, review its
-            context and decide what happens next.
+            Explore the owner’s view of customer needs, open concerns and
+            relationship context. Follow any insight back to the interaction
+            behind it.
           </p>
           <span className="section-note">
             Browser-only demonstration. No real recordings or production
@@ -289,7 +293,7 @@ export default function ConversationWorkspace({
           <div className="workspace-logo">
             <span>N</span>
             <div>
-              NEUAURA<small>RELATIONSHIP WORKSPACE</small>
+              NEUAURA<small>BUSINESS INTELLIGENCE</small>
             </div>
             <button
               aria-label="Close workspace navigation"
@@ -391,28 +395,28 @@ export default function ConversationWorkspace({
             <div className="workspace-page-heading">
               <div>
                 <span className="workspace-kicker">
-                  CONVERSATION INTELLIGENCE / V1
+                  BUSINESS INTELLIGENCE / V1
                 </span>
                 <h3>
                   {view === "Overview"
-                    ? "Context worth keeping."
+                    ? "Stay close to the customer."
                     : view === "Search"
                       ? "Ask your business context."
                       : view}
                 </h3>
                 <p>
                   {view === "Overview"
-                    ? "A continuous view of the people, needs and next steps in your conversations."
+                    ? "A connected picture of customer needs, concerns and relationship updates."
                     : view === "Interactions"
-                      ? "Review the source. Verify what matters."
+                      ? "The source conversations behind your business context."
                       : view === "People"
                         ? "People connected to the context they shared."
                         : view === "Organisations"
                           ? "A relationship history, in one place."
                           : view === "Commitments"
-                            ? "A proposed commitment needs a person’s confirmation."
+                            ? "Keep customer commitments connected to their source and owner."
                             : view === "Follow-ups"
-                              ? "Suggested actions, with a deliberate approval step."
+                              ? "Suggested next steps grounded in the customer relationship."
                               : "Search the fictional dataset. No AI service or real recordings are connected."}
                 </p>
               </div>
@@ -435,141 +439,17 @@ export default function ConversationWorkspace({
                     <option>All workflows</option>
                     <option>Field sales</option>
                     <option>Business development</option>
+                    <option>Service &amp; operations</option>
                   </select>
                 </label>
               )}
             </div>
             {view === "Overview" && (
-              <div className="overview-content">
-                <div className="workspace-summary-strip">
-                  <button onClick={() => changeView("Interactions")}>
-                    <MessageSquare size={19} />
-                    <strong>
-                      {String(visibleRecords.length).padStart(2, "0")}
-                    </strong>
-                    <span>Sample interactions</span>
-                    <ArrowUpRight size={13} />
-                  </button>
-                  <button onClick={() => changeView("Commitments")}>
-                    <ListChecks size={19} />
-                    <strong>
-                      {String(
-                        visibleCommitments.filter((c) => !c.completed).length,
-                      ).padStart(2, "0")}
-                    </strong>
-                    <span>Pending commitments</span>
-                    <ArrowUpRight size={13} />
-                  </button>
-                  <button onClick={() => changeView("People")}>
-                    <Users size={19} />
-                    <strong>
-                      {String(visibleRecords.length).padStart(2, "0")}
-                    </strong>
-                    <span>Relationship records</span>
-                    <ArrowUpRight size={13} />
-                  </button>
-                </div>
-                <div className="overview-grid">
-                  <div>
-                    <div className="workspace-block-heading">
-                      <h4>Recent interactions</h4>
-                      <button onClick={() => changeView("Interactions")}>
-                        View all <ArrowRight size={12} />
-                      </button>
-                    </div>
-                    {visibleRecords.map((r) => (
-                      <button
-                        className="overview-interaction"
-                        key={r.id}
-                        onClick={() => openRecord(r.id)}
-                      >
-                        <div>
-                          <span className="record-avatar">{r.initials}</span>
-                          <div>
-                            <strong>{r.title}</strong>
-                            <span>
-                              {r.person} / {r.organisation}
-                            </span>
-                          </div>
-                          <ArrowUpRight size={14} />
-                        </div>
-                        <p>{r.summary}</p>
-                        <div>
-                          <span>
-                            <CalendarClock size={11} />
-                            {r.date}
-                          </span>
-                          <span
-                            className={`state-pill ${r.reviewed ? "reviewed" : ""}`}
-                          >
-                            {r.reviewed ? "REVIEWED" : "NEEDS REVIEW"}
-                          </span>
-                        </div>
-                      </button>
-                    ))}
-                    <div className="workspace-activity">
-                      <div className="workspace-block-heading">
-                        <h4>
-                          <History size={14} /> Activity history
-                        </h4>
-                        <SampleLabel short />
-                      </div>
-                      {visibleRecords.map((r) => (
-                        <p key={r.id}>
-                          <i />
-                          <span>{r.date}</span>
-                          {r.reviewed
-                            ? "Sample context reviewed"
-                            : "Sample interaction available for review"}
-                          <button onClick={() => openRecord(r.id)}>
-                            {r.organisation}
-                          </button>
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="overview-right">
-                    <div className="workspace-block-heading">
-                      <h4>Suggested next steps</h4>
-                      <ListChecks size={14} />
-                    </div>
-                    {visibleCommitments
-                      .filter((c) => !c.completed)
-                      .map((c) => {
-                        const r = records.find(
-                          (r) => r.id === c.interactionId,
-                        )!;
-                        return (
-                          <div className="next-step" key={c.id}>
-                            <span className="eyebrow">{r.organisation}</span>
-                            <strong>{c.action}</strong>
-                            <span>
-                              <CalendarClock size={12} />
-                              {c.deadline}
-                            </span>
-                            <button onClick={() => openReview(r.id)}>
-                              {r.reviewed
-                                ? "Review source context"
-                                : "Review extracted context"}
-                              <ArrowUpRight size={13} />
-                            </button>
-                          </div>
-                        );
-                      })}
-                    <div className="human-loop-note">
-                      <ShieldCheck size={22} />
-                      <h4>Intelligence, with intention.</h4>
-                      <p>
-                        Review and correct extracted information before
-                        confirming commitments or sharing context.
-                      </p>
-                      <button onClick={() => openReview(record.id)}>
-                        Try a review <ArrowRight size={13} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <BusinessOverview
+                records={visibleRecords}
+                onOpen={openRecord}
+                onView={changeView}
+              />
             )}
             {view === "Interactions" && (
               <div className="workspace-split-view">
@@ -1133,7 +1013,7 @@ export default function ConversationWorkspace({
           )}
           <footer className="workspace-app-footer">
             <ShieldCheck size={12} />
-            <span>HUMAN REVIEW → CONFIRMATION → FOLLOW-THROUGH</span>
+            <span>CUSTOMER → CONTEXT → BUSINESS INTELLIGENCE</span>
             <span>Sample changes reset on reload.</span>
           </footer>
         </div>

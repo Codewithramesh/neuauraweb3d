@@ -22,7 +22,7 @@ const stages = [
   {
     name: "Pendant",
     title: "Purposeful, without getting in the way.",
-    text: "A compact titanium cradle and a graphite chain. The electronic core is securely seated.",
+    text: "A compact titanium cradle and a graphite chain, designed as a future input interface for consented customer interactions.",
     p: 0,
   },
   {
@@ -172,16 +172,17 @@ export default function ProductExplorer() {
             <span className="muted">Built around business interactions.</span>
           </h2>
           <p>
-            The longer-term vision: a purpose-built pendant and a screenless,
-            watch-style wristband. One identical electronic core.
+            The future wearable interface to the same business intelligence
+            layer: a purpose-built pendant and a screenless wristband, sharing
+            one electronic core.
           </p>
         </div>
         <div className="hardware-software-first">
           <ShieldNote />
           <span>
-            <strong>Software first.</strong> Initial pilots can use approved
-            existing devices. Custom hardware remains an industrial design and
-            feasibility direction.
+            <strong>Software first.</strong> The intelligence pipeline can be
+            validated with existing phones, computers and compatible devices.
+            The custom wearable evolves around demonstrated business value.
           </span>
         </div>
       </div>

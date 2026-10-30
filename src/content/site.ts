@@ -2,7 +2,7 @@ export type ProductMode = "pendant" | "wristband";
 export const site = {
   name: "NEUAURA",
   version: "V1",
-  category: "Business Conversation Intelligence",
+  category: "Business Intelligence for Customer Relationships",
   tagline: "Human Intelligence Relationship Layer.",
   status: "Software MVP / Hardware in development",
   hardwareStatus: "Hardware concept / Industrial design in development",
@@ -19,7 +19,7 @@ export const site = {
 };
 export const founderMailto = `mailto:${site.founder.email}?subject=NEUAURA%20-%20Business%20Pilot%20Enquiry`;
 export const navigation = [
-  { label: "Platform", href: "#platform" },
+  { label: "Architecture", href: "#platform" },
   { label: "Intelligence", href: "#intelligence" },
   { label: "Hardware", href: "#hardware" },
   { label: "Trust", href: "#trust" },
@@ -57,75 +57,19 @@ export const modes = [
     ],
   },
 ];
-export const workflow = [
-  {
-    name: "Capture",
-    title: "Begin with permission.",
-    description:
-      "Approved audio or notes input from phones, laptops and compatible existing devices.",
-    example: "Customer visit · permitted input",
-    detail:
-      "The software pilot can begin with existing devices. Custom hardware is a future development direction.",
-  },
-  {
-    name: "Transcribe",
-    title: "Make the conversation readable.",
-    description:
-      "Convert permitted conversations into text for review and reference.",
-    example: "“Could you share the revised scope and product specifications?”",
-    detail:
-      "Illustrative transcript. Transcription capability and reliability require validation in the intended workflow.",
-  },
-  {
-    name: "Extract",
-    title: "Bring important context into focus.",
-    description:
-      "Identify people, organisations, needs, objections, decisions, commitments and deadlines.",
-    example: "Need: updated proposal / Commitment: share revised scope",
-    detail:
-      "Suggested extraction is a starting point. Identity and important details must be verified by a person.",
-  },
-  {
-    name: "Review",
-    title: "A human stays in the loop.",
-    description:
-      "Verify and correct the extracted information before it becomes a shared business record.",
-    example: "Review → correct → confirm",
-    detail:
-      "The workspace below lets you edit sample context and explicitly mark it reviewed.",
-  },
-  {
-    name: "Connect",
-    title: "Build a continuous relationship history.",
-    description:
-      "Link the interaction to confirmed people and organisation records.",
-    example: "Arjun Mehta → Northstar Components → customer meeting",
-    detail:
-      "Connect records when identity is known and confirmed. Never infer unapproved profiles.",
-  },
-  {
-    name: "Follow up",
-    title: "Make the next step deliberate.",
-    description:
-      "Prepare suggested actions and reminders for user review and confirmation.",
-    example: "Prepare the updated proposal → review → approve the next action",
-    detail:
-      "Consequential external actions require appropriate confirmation. This demo performs no external actions.",
-  },
-];
 export const useCases = [
   {
     number: "01",
     title: "Field sales",
-    label: "PRIMARY MARKET ENTRY",
-    headline: "Leave the visit.\nKeep the context.",
+    label: "INITIAL PILOT WORKFLOW",
+    headline: "Understand the customer.\nKeep the relationship.",
     description:
       "Retain customer requirements, product specifications, pricing discussions, objections, decision-maker context and commercial commitments.",
     flow: [
       "Customer visit",
       "Structured requirements",
       "Sales context",
-      "Follow-up actions",
+      "Business visibility",
     ],
     note: "An updated proposal. A clarified timeline. A next step worth remembering.",
   },
@@ -133,14 +77,14 @@ export const useCases = [
     number: "02",
     title: "Business development",
     label: "INITIAL FOCUS",
-    headline: "Turn a good conversation\ninto a clear next step.",
+    headline: "Connect the conversation\nto the business.",
     description:
       "Organise partnership discussions, opportunities, introductions, commercial proposals, meeting outcomes and follow-up commitments.",
     flow: [
       "Partnership discussion",
       "Opportunity context",
       "Agreed outcome",
-      "Reviewed next step",
+      "Relationship intelligence",
     ],
     note: "A potential partner. A shared opportunity. A relationship with continuity.",
   },
@@ -150,13 +94,13 @@ export const roadmap = [
     title: "Define",
     status: "INITIAL FOCUS",
     description:
-      "One initial customer profile. One repeatable business workflow.",
+      "Choose an initial customer profile, workflow and consent requirements.",
   },
   {
     title: "Software prototype",
     status: "IN DEVELOPMENT",
     description:
-      "Capture/import, transcription, extraction, review, search and follow-up.",
+      "Capture/import, background processing, structured context, search and an owner view.",
   },
   {
     title: "Pilot",
@@ -167,7 +111,7 @@ export const roadmap = [
     title: "Refine",
     status: "PILOT-LED",
     description:
-      "Improve usability, reliability, extraction quality and workflow fit.",
+      "Refine reliability and workflow fit. Prioritise APIs and integrations when pilot demand is validated.",
   },
   {
     title: "Wearable feasibility",
