@@ -3,526 +3,311 @@ import { assetManifest } from "../../content/site";
 
 export interface ProductAssembly {
   root: THREE.Group;
-  frame: THREE.Object3D;
-  leftTemple: THREE.Object3D;
-  rightTemple: THREE.Object3D;
   core: THREE.Object3D;
-  rail: THREE.Object3D;
-  alignment: THREE.Object3D;
-  wristband: THREE.Object3D;
   pendant: THREE.Object3D;
+  wristband: THREE.Object3D;
 }
-
-const metal = (color: string, roughness = 0.3, metalness = 0.8) =>
+const metal = (color: string, roughness = 0.3, metalness = 0.85) =>
   new THREE.MeshStandardMaterial({ color, roughness, metalness });
-
-function outline(width: number, height: number, r: number) {
+function outline(w: number, h: number, r: number) {
   const s = new THREE.Shape(),
-    x = -width / 2,
-    y = -height / 2;
+    x = -w / 2,
+    y = -h / 2;
   s.moveTo(x + r, y);
-  s.lineTo(x + width - r, y);
-  s.quadraticCurveTo(x + width, y, x + width, y + r);
-  s.lineTo(x + width, y + height - r);
-  s.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
-  s.lineTo(x + r, y + height);
-  s.quadraticCurveTo(x, y + height, x, y + height - r);
+  s.lineTo(x + w - r, y);
+  s.quadraticCurveTo(x + w, y, x + w, y + r);
+  s.lineTo(x + w, y + h - r);
+  s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  s.lineTo(x + r, y + h);
+  s.quadraticCurveTo(x, y + h, x, y + h - r);
   s.lineTo(x, y + r);
   s.quadraticCurveTo(x, y, x + r, y);
   return s;
 }
-
-function lensOutline(scale = 1) {
-  const s = new THREE.Shape();
-  s.moveTo(-1.02 * scale, 0.51 * scale);
-  s.bezierCurveTo(
-    -0.9 * scale,
-    0.76 * scale,
-    0.69 * scale,
-    0.76 * scale,
-    1.02 * scale,
-    0.53 * scale,
-  );
-  s.bezierCurveTo(
-    1.12 * scale,
-    0.41 * scale,
-    0.88 * scale,
-    -0.49 * scale,
-    0.62 * scale,
-    -0.61 * scale,
-  );
-  s.bezierCurveTo(
-    0.3 * scale,
-    -0.75 * scale,
-    -0.6 * scale,
-    -0.73 * scale,
-    -0.82 * scale,
-    -0.5 * scale,
-  );
-  s.bezierCurveTo(
-    -1.0 * scale,
-    -0.3 * scale,
-    -1.14 * scale,
-    0.29 * scale,
-    -1.02 * scale,
-    0.51 * scale,
-  );
-  return s;
-}
-
 function slab(
-  width: number,
-  height: number,
-  depth: number,
-  radius: number,
+  w: number,
+  h: number,
+  d: number,
+  r: number,
   material: THREE.Material,
 ) {
-  const geometry = new THREE.ExtrudeGeometry(outline(width, height, radius), {
-    depth,
+  const g = new THREE.ExtrudeGeometry(outline(w, h, r), {
+    depth: d,
     bevelEnabled: true,
-    bevelSize: 0.025,
-    bevelThickness: 0.025,
+    bevelSize: 0.018,
+    bevelThickness: 0.018,
     bevelSegments: 3,
-    steps: 1,
-    curveSegments: 10,
+    curveSegments: 18,
   });
-  geometry.translate(0, 0, -depth / 2);
-  return new THREE.Mesh(geometry, material);
+  g.translate(0, 0, -d / 2);
+  return new THREE.Mesh(g, material);
 }
-
-function tube(points: number[][], radius: number, material: THREE.Material) {
-  return new THREE.Mesh(
-    new THREE.TubeGeometry(
-      new THREE.CatmullRomCurve3(
-        points.map(
-          (p) => new THREE.Vector3(...(p as [number, number, number])),
-        ),
-      ),
-      44,
-      radius,
-      8,
-      false,
-    ),
-    material,
-  );
-}
-
 export function createConceptAssembly(): ProductAssembly {
-  const root = new THREE.Group();
-  const graphite = metal("#343e46", 0.25, 0.65);
-  const titanium = metal("#b5c1c9", 0.26, 0.9);
-  const edge = metal("#697984", 0.29, 0.85);
-  const black = metal("#0a1015", 0.42, 0.25);
-  const rubber = metal("#222a30", 0.85, 0.05);
-  const lensMaterial = new THREE.MeshPhysicalMaterial({
-    color: "#30434e",
-    metalness: 0.18,
-    roughness: 0.12,
-    transparent: true,
-    opacity: 0.48,
-    clearcoat: 1,
-    side: THREE.DoubleSide,
-  });
-  const frame = new THREE.Group();
-  frame.name = "glasses_frame";
-  for (const side of [-1, 1]) {
-    const shape = lensOutline(1.06);
-    const hole = lensOutline(0.89);
-    shape.holes.push(new THREE.Path(hole.getPoints(40).reverse()));
-    const rim = new THREE.Mesh(
-      new THREE.ExtrudeGeometry(shape, {
-        depth: 0.15,
-        bevelEnabled: true,
-        bevelSize: 0.045,
-        bevelThickness: 0.04,
-        bevelSegments: 3,
-        curveSegments: 30,
-      }),
-      graphite,
-    );
-    rim.position.set(side * 1.27, 0, 0.38);
-    frame.add(rim);
-    const lens = new THREE.Mesh(
-      new THREE.ShapeGeometry(lensOutline(0.89), 40),
-      lensMaterial,
-    );
-    lens.position.set(side * 1.27, 0, 0.43);
-    frame.add(lens);
-    // Precision corner pins and a narrow brow highlight.
-    for (const delta of [-0.07, 0.07]) {
-      const pin = new THREE.Mesh(
-        new THREE.SphereGeometry(0.035, 10, 6),
-        titanium,
-      );
-      pin.position.set(side * 2.28 + delta, 0.42, 0.57);
-      frame.add(pin);
-    }
-    const hinge = slab(0.28, 0.28, 0.22, 0.06, titanium);
-    hinge.position.set(side * 2.45, 0.35, 0.34);
-    frame.add(hinge);
-  }
-  frame.add(
-    tube(
-      [
-        [-0.33, 0.32, 0.45],
-        [-0.18, 0.44, 0.49],
-        [0.18, 0.44, 0.49],
-        [0.33, 0.32, 0.45],
-      ],
-      0.085,
-      graphite,
-    ),
-  );
-  frame.add(
-    tube(
-      [
-        [-0.3, 0.15, 0.4],
-        [-0.22, 0.06, 0.3],
-        [-0.28, -0.1, 0.25],
-      ],
-      0.055,
-      graphite,
-    ),
-  );
-  frame.add(
-    tube(
-      [
-        [0.3, 0.15, 0.4],
-        [0.22, 0.06, 0.3],
-        [0.28, -0.1, 0.25],
-      ],
-      0.055,
-      graphite,
-    ),
-  );
-
-  const leftTemple = new THREE.Group();
-  leftTemple.name = "left_temple";
-  const rightTemple = new THREE.Group();
-  rightTemple.name = "right_temple";
-  for (const [side, temple] of [
-    [-1, leftTemple],
-    [1, rightTemple],
-  ] as const) {
-    const arm = slab(0.17, 0.22, 3.1, 0.07, graphite);
-    arm.position.set(side * 2.47, 0.32, -1.19);
-    temple.add(arm);
-    temple.add(
-      tube(
-        [
-          [side * 2.47, 0.32, -2.45],
-          [side * 2.42, 0.28, -2.85],
-          [side * 2.31, -0.16, -3.15],
-          [side * 2.28, -0.37, -3.08],
-        ],
-        0.105,
-        rubber,
-      ),
-    );
-    const trim = slab(0.018, 0.055, 1.3, 0.012, edge);
-    trim.position.set(side * 2.565, 0.35, -1.48);
-    temple.add(trim);
-  }
-
-  const core = new THREE.Group();
+  const root = new THREE.Group(),
+    core = new THREE.Group(),
+    pendant = new THREE.Group(),
+    wristband = new THREE.Group();
   core.name = "neuaura_core";
-  core.userData.componentId = "NEUAURA-SHARED-CORE-01";
-  core.add(slab(1.8, 0.33, 0.31, 0.13, titanium));
-  const shell = slab(1.71, 0.29, 0.324, 0.11, graphite);
-  core.add(shell);
-  const face = slab(1.56, 0.18, 0.012, 0.07, black);
-  face.position.z = 0.171;
+  pendant.name = "pendant_assembly";
+  wristband.name = "wristband_assembly";
+  core.userData.componentId = "NEUAURA-V1-SHARED-CORE-01";
+  const titanium = metal("#aeb8c1", 0.28),
+    graphite = metal("#252c32", 0.34, 0.75),
+    edge = metal("#66747e", 0.3),
+    black = metal("#080f14", 0.42, 0.2);
+  core.add(slab(0.68, 1.95, 0.33, 0.29, titanium));
+  core.add(slab(0.62, 1.88, 0.35, 0.27, graphite));
+  const face = slab(0.51, 1.68, 0.018, 0.23, black);
+  face.position.z = 0.187;
   core.add(face);
-  // The camera, button and consent indicator remain children of the same core.
-  const camera = new THREE.Group();
-  camera.name = "core_camera";
-  const bezel = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.115, 0.115, 0.07, 32),
-    edge,
+  const sensor = new THREE.Group();
+  sensor.name = "core_camera";
+  const window = new THREE.Mesh(
+    new THREE.CircleGeometry(0.076, 32),
+    metal("#526371", 0.14, 0.8),
   );
-  bezel.rotation.z = Math.PI / 2;
-  camera.add(bezel);
-  const glass = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.078, 0.078, 0.078, 32),
-    metal("#070e19", 0.06, 0.7),
+  window.position.z = 0.006;
+  sensor.add(window);
+  const aperture = new THREE.Mesh(
+    new THREE.CircleGeometry(0.051, 28),
+    metal("#0a1420", 0.05, 0.6),
   );
-  glass.rotation.z = Math.PI / 2;
-  camera.add(glass);
+  aperture.position.z = 0.009;
+  sensor.add(aperture);
   const iris = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.037, 0.037, 0.08, 24),
-    metal("#27475f", 0.08, 0.8),
+    new THREE.CircleGeometry(0.023, 20),
+    metal("#213a46", 0.05, 0.8),
   );
-  iris.rotation.z = Math.PI / 2;
-  camera.add(iris);
-  camera.position.x = 0.92;
-  core.add(camera);
-  const button = slab(0.29, 0.07, 0.1, 0.035, edge);
+  iris.position.z = 0.011;
+  sensor.add(iris);
+  sensor.position.set(0, 0.57, 0.2);
+  core.add(sensor);
+  const button = slab(0.05, 0.3, 0.12, 0.024, edge);
   button.name = "core_button";
-  button.position.set(-0.09, 0.19, 0);
+  button.position.set(0.35, 0.1, 0);
   core.add(button);
   const indicator = slab(
-    0.15,
+    0.13,
     0.024,
-    0.015,
-    0.012,
+    0.014,
+    0.01,
     new THREE.MeshStandardMaterial({
       color: "#66e0ce",
       emissive: "#66e0ce",
-      emissiveIntensity: 1.3,
+      emissiveIntensity: 0.7,
     }),
   );
   indicator.name = "core_indicator";
-  indicator.position.set(0.43, 0.005, 0.185);
+  indicator.position.set(0, -0.62, 0.207);
   core.add(indicator);
-  for (let i = 0; i < 5; i++) {
-    const vent = slab(0.018, 0.07, 0.012, 0.008, black);
-    vent.position.set(-0.51 + i * 0.065, 0, 0.183);
-    core.add(vent);
+  for (let i = 0; i < 3; i++) {
+    const mic = new THREE.Mesh(new THREE.CircleGeometry(0.013, 10), black);
+    mic.position.set((i - 1) * 0.06, 0.32, 0.204);
+    core.add(mic);
   }
-  for (const x of [-0.68, 0.68]) {
-    const screw = new THREE.Mesh(new THREE.CircleGeometry(0.018, 10), titanium);
-    screw.position.set(x, -0.08, 0.18);
-    core.add(screw);
+  for (const x of [-0.19, 0.19]) {
+    const rail = slab(0.035, 1.25, 0.07, 0.015, edge);
+    rail.position.set(x, 0, -0.2);
+    core.add(rail);
   }
-
-  const rail = new THREE.Group();
-  rail.name = "docking_rail";
-  const railBase = slab(1.92, 0.08, 0.23, 0.025, edge);
-  railBase.rotation.y = Math.PI / 2;
-  rail.add(railBase);
-  const alignment = new THREE.Group();
-  alignment.name = "alignment_components";
-  for (const z of [-0.55, -1.35]) {
-    const pin = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.035, 0.035, 0.13, 12),
-      titanium,
+  for (const y of [-0.38, -0.5]) {
+    const contact = new THREE.Mesh(
+      new THREE.CircleGeometry(0.023, 10),
+      metal("#9a997e"),
     );
-    pin.position.set(2.53, 0.36, z);
-    alignment.add(pin);
+    contact.rotation.y = Math.PI;
+    contact.position.set(0, y, -0.226);
+    core.add(contact);
   }
 
-  const wristband = new THREE.Group();
-  wristband.name = "wristband_assembly";
-  const strapShape = new THREE.Shape();
-  strapShape.absellipse(0, 0, 1.08, 1.24, 0, Math.PI * 2, false, 0);
-  const inside = new THREE.Path();
-  inside.absellipse(0, 0, 0.87, 1.02, 0, Math.PI * 2, true, 0);
-  strapShape.holes.push(inside);
-  const strapGeo = new THREE.ExtrudeGeometry(strapShape, {
-    depth: 0.71,
+  const surround = outline(0.8, 2.11, 0.33);
+  surround.holes.push(
+    new THREE.Path(outline(0.65, 1.91, 0.27).getPoints(40).reverse()),
+  );
+  const cradleGeo = new THREE.ExtrudeGeometry(surround, {
+    depth: 0.23,
     bevelEnabled: true,
-    bevelSize: 0.035,
-    bevelThickness: 0.035,
+    bevelSize: 0.015,
+    bevelThickness: 0.015,
     bevelSegments: 3,
-    curveSegments: 64,
+    curveSegments: 24,
   });
-  strapGeo.translate(0, 0, -0.355);
-  const strap = new THREE.Mesh(strapGeo, rubber);
-  strap.rotation.y = Math.PI / 2;
-  wristband.add(strap);
-  const cradle = slab(0.53, 1.97, 0.2, 0.19, titanium);
-  cradle.rotation.x = -Math.PI / 2;
-  cradle.position.y = 1.19;
-  wristband.add(cradle);
-  const recess = slab(0.36, 1.78, 0.21, 0.13, black);
-  recess.rotation.x = -Math.PI / 2;
-  recess.position.y = 1.205;
-  wristband.add(recess);
-  for (let i = 0; i < 5; i++) {
-    const dot = new THREE.Mesh(new THREE.CircleGeometry(0.048, 16), black);
-    dot.rotation.x = Math.PI / 2;
-    dot.position.set(0, -1.24, 0.25 - i * 0.16);
-    wristband.add(dot);
+  cradleGeo.translate(0, 0, -0.115);
+  const cradle = new THREE.Mesh(cradleGeo, titanium);
+  cradle.name = "pendant_cradle";
+  pendant.add(cradle);
+  const back = slab(0.65, 1.9, 0.045, 0.27, graphite);
+  back.position.z = -0.13;
+  pendant.add(back);
+  for (const x of [-0.19, 0.19]) {
+    const guide = slab(0.04, 1.28, 0.07, 0.015, edge);
+    guide.position.set(x, 0, -0.08);
+    pendant.add(guide);
   }
-  const buckle = slab(0.86, 0.21, 0.15, 0.04, edge);
-  buckle.position.set(0, -0.92, -0.75);
-  wristband.add(buckle);
-
-  const pendant = new THREE.Group();
-  pendant.name = "pendant_assembly";
-  const surround = slab(0.51, 2.04, 0.25, 0.21, titanium);
-  pendant.add(surround);
-  const recessPendant = slab(0.35, 1.8, 0.27, 0.13, black);
-  recessPendant.position.z = 0.045;
-  pendant.add(recessPendant);
   const bail = new THREE.Mesh(
-    new THREE.TorusGeometry(0.15, 0.045, 8, 24),
+    new THREE.TorusGeometry(0.13, 0.035, 8, 24),
     titanium,
   );
   bail.position.y = 1.17;
   pendant.add(bail);
-  // Actual alternating oval chain links rather than a single cord.
-  const chainCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 1.3, 0),
-    new THREE.Vector3(-1.1, 2.65, -0.1),
-    new THREE.Vector3(-0.9, 3.25, -0.45),
-    new THREE.Vector3(0.9, 3.25, -0.45),
-    new THREE.Vector3(1.1, 2.65, -0.1),
-    new THREE.Vector3(0, 1.3, 0),
+  const chain = new THREE.Group();
+  chain.name = "pendant_chain";
+  pendant.add(chain);
+  const curve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, 1.29, 0),
+    new THREE.Vector3(-1.01, 2.7, -0.13),
+    new THREE.Vector3(-0.8, 3.3, -0.35),
+    new THREE.Vector3(0.8, 3.3, -0.35),
+    new THREE.Vector3(1.01, 2.7, -0.13),
+    new THREE.Vector3(0, 1.29, 0),
   ]);
-  const chainGeometry = new THREE.TorusGeometry(0.061, 0.018, 5, 10);
-  for (let i = 0; i < 104; i++) {
-    const link = new THREE.Mesh(chainGeometry, edge);
-    const t = i / 104;
-    link.position.copy(chainCurve.getPoint(t));
+  const linkGeo = new THREE.TorusGeometry(0.052, 0.014, 5, 10);
+  for (let i = 0; i < 108; i++) {
+    const link = new THREE.Mesh(linkGeo, edge);
+    link.position.copy(curve.getPoint(i / 108));
     link.quaternion.setFromUnitVectors(
       new THREE.Vector3(0, 1, 0),
-      chainCurve.getTangent(t),
+      curve.getTangent(i / 108),
     );
     link.rotateY(((i % 2) * Math.PI) / 2);
-    link.scale.y = 1.35;
-    pendant.add(link);
+    link.scale.y = 1.45;
+    chain.add(link);
   }
 
-  root.add(
-    frame,
-    leftTemple,
-    rightTemple,
-    core,
-    rail,
-    alignment,
-    wristband,
-    pendant,
-  );
-  const assembly = {
-    root,
-    frame,
-    leftTemple,
-    rightTemple,
-    core,
-    rail,
-    alignment,
-    wristband,
-    pendant,
-  };
+  const noise = new Uint8Array(64 * 64 * 4);
+  for (let i = 0; i < 64 * 64; i++) {
+    const n = 190 + ((i * 31) % 57);
+    noise.set([n, n, n, 255], i * 4);
+  }
+  const texture = new THREE.DataTexture(noise, 64, 64);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(20, 12);
+  texture.needsUpdate = true;
+  const silicone = new THREE.MeshStandardMaterial({
+    color: "#202930",
+    roughness: 0.87,
+    metalness: 0.02,
+    bumpMap: texture,
+    bumpScale: 0.009,
+  });
+  const loop = new THREE.Shape();
+  loop.absellipse(0, 0, 1.04, 1.12, 0, Math.PI * 2, false, 0);
+  const hole = new THREE.Path();
+  hole.absellipse(0, 0, 0.83, 0.91, 0, Math.PI * 2, true, 0);
+  loop.holes.push(hole);
+  const strapGeo = new THREE.ExtrudeGeometry(loop, {
+    depth: 0.83,
+    bevelEnabled: true,
+    bevelSize: 0.025,
+    bevelThickness: 0.025,
+    bevelSegments: 3,
+    curveSegments: 64,
+  });
+  strapGeo.translate(0, 0, -0.415);
+  const strap = new THREE.Mesh(strapGeo, silicone);
+  strap.name = "wristband_strap";
+  strap.rotation.y = Math.PI / 2;
+  wristband.add(strap);
+  const wristCradle = new THREE.Mesh(cradleGeo, titanium);
+  wristCradle.name = "wristband_cradle";
+  wristCradle.rotation.x = -Math.PI / 2;
+  wristCradle.position.y = 1.055;
+  wristband.add(wristCradle);
+  const wristBack = slab(0.65, 1.9, 0.045, 0.27, graphite);
+  wristBack.rotation.x = -Math.PI / 2;
+  wristBack.position.y = 0.92;
+  wristband.add(wristBack);
+  const buckle = slab(0.98, 0.22, 0.14, 0.055, titanium);
+  buckle.name = "wristband_buckle";
+  buckle.position.set(0, -0.83, -0.71);
+  wristband.add(buckle);
+  for (let i = 0; i < 5; i++) {
+    const notch = new THREE.Mesh(new THREE.CircleGeometry(0.036, 12), black);
+    notch.rotation.x = Math.PI / 2;
+    notch.position.set(0, -1.13, 0.3 - i * 0.14);
+    wristband.add(notch);
+  }
+  root.add(pendant, wristband, core);
+  const assembly = { root, core, pendant, wristband };
   applyAssemblyPose(assembly, 0);
   return assembly;
 }
-
 type Pose = { p: [number, number, number]; r: [number, number, number] };
-const anchors = [0, 0.23, 0.34, 0.53, 0.65, 0.81, 1];
-const poses: Record<Exclude<keyof ProductAssembly, "root">, Pose[]> = {
-  frame: [
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [-3.8, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-4.2, -0.3, -1], r: [0, 0.25, 0] },
-  ],
-  leftTemple: [
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [-3.8, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-4.2, -0.3, -1], r: [0, 0.25, 0] },
-  ],
-  rightTemple: [
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [0.6, 0, 0], r: [0, 0, 0] },
-    { p: [-3.8, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-4.2, -0.3, -1], r: [0, 0.25, 0] },
-  ],
+export const poseAnchors = [0, 0.22, 0.42, 0.68, 0.86, 1];
+const poses: Record<"core" | "pendant" | "wristband", Pose[]> = {
   core: [
-    { p: [2.55, 0.44, -0.72], r: [0, Math.PI / 2, 0] },
-    { p: [2.55, 0.44, 1.1], r: [0, Math.PI / 2, 0] },
-    { p: [0.35, 1.7, 0], r: [0, Math.PI / 2, 0] },
-    { p: [0, 1.39, 0], r: [0, Math.PI / 2, 0] },
-    { p: [0, 2.3, 0], r: [0, Math.PI / 2, 0] },
-    { p: [0, 0, 0.23], r: [0, 0, Math.PI / 2] },
-    { p: [0.15, 1.39, 0.5], r: [0, Math.PI / 2, 0] },
-  ],
-  rail: [
-    { p: [2.55, 0.23, -0.72], r: [0, 0, 0] },
-    { p: [2.85, 0.05, -0.72], r: [0, 0, 0] },
-    { p: [-1.25, -0.2, -1.72], r: [0, 0.16, 0] },
-    { p: [-29.45, -0.07, -1.72], r: [0, 0.16, 0] },
-    { p: [-29.45, -0.07, -1.72], r: [0, 0.16, 0] },
-    { p: [-29.45, -0.07, -1.72], r: [0, 0.16, 0] },
-    { p: [-1.65, -0.07, -1.72], r: [0, 0.25, 0] },
-  ],
-  alignment: [
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [0.05, -0.4, 0], r: [0, 0, 0] },
-    { p: [-3.8, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-32, -0.3, -1], r: [0, 0.16, 0] },
-    { p: [-4.2, -0.3, -1], r: [0, 0.25, 0] },
-  ],
-  wristband: [
-    { p: [32, -1, -2], r: [0, 0, 0] },
-    { p: [32, -1, -2], r: [0, 0, 0] },
-    { p: [0, -1.2, 0], r: [0, 0, 0] },
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [-32, -1, -2], r: [0, 0, 0] },
-    { p: [0.15, 0, 0.5], r: [0, 0, 0] },
+    { p: [0, -0.8, 0.25], r: [0, 0, 0] },
+    { p: [0, -0.8, 1.45], r: [0, 0, 0] },
+    { p: [0, 1.8, 1.1], r: [-Math.PI / 2, 0, 0] },
+    { p: [0, 0.95, 0], r: [-Math.PI / 2, 0, 0] },
+    { p: [0, 1.8, 0], r: [-Math.PI / 2, 0, 0] },
+    { p: [-0.1, 0.45, 0.7], r: [0.1, 0.1, -0.18] },
   ],
   pendant: [
-    { p: [36, 0, -2], r: [0, 0, 0] },
-    { p: [36, 0, -2], r: [0, 0, 0] },
-    { p: [36, 0, -2], r: [0, 0, 0] },
-    { p: [36, 0, -2], r: [0, 0, 0] },
-    { p: [3, -0.7, -1], r: [0, 0, 0] },
-    { p: [0, 0, 0], r: [0, 0, 0] },
-    { p: [4.1, -0.2, 0], r: [0, 0, 0] },
+    { p: [0, -0.8, 0], r: [0, 0, 0] },
+    { p: [0, -0.8, 0], r: [0, 0, 0] },
+    { p: [-2.6, -0.8, -0.5], r: [0, 0, -0.1] },
+    { p: [-32, -0.8, -0.5], r: [0, 0, -0.1] },
+    { p: [-2.6, -1.2, 0], r: [0, 0, -0.1] },
+    { p: [-1.75, -1.35, 0], r: [0, 0, -0.12] },
+  ],
+  wristband: [
+    { p: [32, -0.25, 0], r: [0, 0, 0] },
+    { p: [32, -0.25, 0], r: [0, 0, 0] },
+    { p: [0, -1.0, 0], r: [0, 0, 0] },
+    { p: [0, -0.25, 0], r: [0, 0, 0] },
+    { p: [1.6, -0.4, 0], r: [0, 0, 0] },
+    { p: [1.95, -0.5, 0], r: [0, 0.15, 0.05] },
   ],
 };
 const qa = new THREE.Quaternion(),
   qb = new THREE.Quaternion(),
   euler = new THREE.Euler();
-export function applyAssemblyPose(assembly: ProductAssembly, progress: number) {
+export function applyAssemblyPose(a: ProductAssembly, progress: number) {
   const p = THREE.MathUtils.clamp(progress, 0, 1);
-  let index = 0;
-  while (index < anchors.length - 2 && p > anchors[index + 1]) index++;
-  const t = THREE.MathUtils.smoothstep(p, anchors[index], anchors[index + 1]);
-  for (const key of Object.keys(poses) as (keyof typeof poses)[]) {
-    const a = poses[key][index],
-      b = poses[key][index + 1],
-      object = assembly[key];
-    object.position.set(
-      THREE.MathUtils.lerp(a.p[0], b.p[0], t),
-      THREE.MathUtils.lerp(a.p[1], b.p[1], t),
-      THREE.MathUtils.lerp(a.p[2], b.p[2], t),
+  let i = 0;
+  while (i < poseAnchors.length - 2 && p > poseAnchors[i + 1]) i++;
+  const t = THREE.MathUtils.smoothstep(p, poseAnchors[i], poseAnchors[i + 1]);
+  for (const key of ["core", "pendant", "wristband"] as const) {
+    const x = poses[key][i],
+      y = poses[key][i + 1];
+    a[key].position.set(
+      THREE.MathUtils.lerp(x.p[0], y.p[0], t),
+      THREE.MathUtils.lerp(x.p[1], y.p[1], t),
+      THREE.MathUtils.lerp(x.p[2], y.p[2], t),
     );
-    qa.setFromEuler(euler.set(...a.r));
-    qb.setFromEuler(euler.set(...b.r));
-    object.quaternion.slerpQuaternions(qa, qb, t);
+    qa.setFromEuler(euler.set(...x.r));
+    qb.setFromEuler(euler.set(...y.r));
+    a[key].quaternion.slerpQuaternions(qa, qb, t);
   }
 }
-
 export function mapSuppliedAssembly(scene: THREE.Group): ProductAssembly {
-  const mapped = { root: scene } as ProductAssembly;
+  const a = { root: scene } as ProductAssembly;
   for (const [key, name] of Object.entries(assetManifest.nodeMapping)) {
     const node = scene.getObjectByName(name);
     if (!node)
       throw new Error(
-        `Supplied model is missing mapped node: ${name}. Inspect the asset and update assetManifest.nodeMapping.`,
+        `Missing mapped product node: ${name}. Inspect the supplied asset hierarchy.`,
       );
-    mapped[key as Exclude<keyof ProductAssembly, "root">] = node;
+    a[key as Exclude<keyof ProductAssembly, "root">] = node;
   }
-  return mapped;
+  return a;
 }
-
-export function disposeAssembly(assembly: ProductAssembly) {
+export function disposeAssembly(a: Pick<ProductAssembly, "root">) {
   const geometries = new Set<THREE.BufferGeometry>(),
-    materials = new Set<THREE.Material>();
-  assembly.root.traverse((object) => {
-    if (object instanceof THREE.Mesh) {
-      geometries.add(object.geometry);
-      for (const material of Array.isArray(object.material)
-        ? object.material
-        : [object.material])
-        materials.add(material);
+    materials = new Set<THREE.Material>(),
+    textures = new Set<THREE.Texture>();
+  a.root.traverse((o) => {
+    if (o instanceof THREE.Mesh) {
+      geometries.add(o.geometry);
+      for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+        materials.add(m);
+        if (m instanceof THREE.MeshStandardMaterial && m.bumpMap)
+          textures.add(m.bumpMap);
+      }
     }
   });
   geometries.forEach((g) => g.dispose());
   materials.forEach((m) => m.dispose());
+  textures.forEach((t) => t.dispose());
 }

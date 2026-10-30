@@ -59,30 +59,35 @@ for (let step = 0; step <= 100; step++) {
 }
 applyAssemblyPose(assembly, 0);
 const before = core.position.clone();
-applyAssemblyPose(assembly, 0.23);
+applyAssemblyPose(assembly, 0.22);
 assert.equal(core.position.x, before.x);
 assert.equal(core.position.y, before.y);
 assert(
   core.position.z > before.z,
   "Initial extraction must follow one linear rail",
 );
-applyAssemblyPose(assembly, 0.53);
+applyAssemblyPose(assembly, 0.68);
 assert.deepEqual(
   core.position.toArray(),
-  [0, 1.39, 0],
+  [0, 0.95, 0],
   "Wristband docking anchor",
 );
-applyAssemblyPose(assembly, 0.81);
-assert.deepEqual(
-  core.position.toArray(),
-  [0, 0, 0.23],
-  "Pendant docking anchor",
+assert(
+  Math.abs(core.rotation.x + Math.PI / 2) < 1e-10,
+  "Core aligns to wrist cradle",
 );
 applyAssemblyPose(assembly, 1);
 assert.deepEqual(
   core.position.toArray(),
-  [0.15, 1.39, 0.5],
-  "Final shared core remains in wristband",
+  [-0.1, 0.45, 0.7],
+  "Final core is detached between two empty cradles",
+);
+assert(assembly.pendant.position.x < core.position.x);
+assert(assembly.wristband.position.x > core.position.x);
+assert.equal(
+  assembly.root.children.length,
+  3,
+  "Exactly two configurations and a single core",
 );
 disposeAssembly(assembly);
 console.log(

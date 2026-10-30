@@ -4,7 +4,9 @@ export interface Enquiry {
   name: string;
   email: string;
   organisation: string;
-  interest: string;
+  role: string;
+  users: number;
+  workflow: string;
   message: string;
 }
 export type EnquiryResult =
@@ -50,7 +52,7 @@ export async function submitEnquiry(enquiry: Enquiry): Promise<EnquiryResult> {
   }
 }
 export function downloadEnquiry(enquiry: Enquiry) {
-  const content = `NEUAURA — Pilot enquiry\n\nName: ${enquiry.name}\nWork email: ${enquiry.email}\nOrganisation: ${enquiry.organisation}\nInterest: ${enquiry.interest}\n\n${enquiry.message}\n\nSaved locally. Downloading this file does not send the enquiry.\n`;
+  const content = `NEUAURA — Pilot enquiry\n\nName: ${enquiry.name}\nWork email: ${enquiry.email}\nOrganisation: ${enquiry.organisation}\nJob role: ${enquiry.role}\nPotential users: ${enquiry.users}\nBusiness workflow: ${enquiry.workflow}\n\n${enquiry.message}\n\nSaved locally. Downloading this file does not send the enquiry.\n`;
   const url = URL.createObjectURL(
     new Blob([content], { type: "text/plain;charset=utf-8" }),
   );

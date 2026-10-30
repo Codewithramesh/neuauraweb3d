@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { navigation } from "../../content/site";
-
 export function Brand() {
   return (
     <a href="#home" className="brand" aria-label="NEUAURA home">
       <svg
-        width="24"
+        width="22"
         height="26"
         viewBox="0 0 24 26"
         fill="none"
@@ -15,7 +14,7 @@ export function Brand() {
         <path
           d="M3 22V4h4l14 18V4M3 4l18 18"
           stroke="currentColor"
-          strokeWidth="2.1"
+          strokeWidth="1.9"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -38,45 +37,39 @@ export default function Navbar() {
     <header className="site-header">
       <div className="nav-inner">
         <Brand />
-        <nav aria-label="Main navigation" className="desktop-nav">
-          {navigation.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
+        <nav className="desktop-nav" aria-label="Main navigation">
+          {navigation.map((n) => (
+            <a key={n.href} href={n.href}>
+              {n.label}
             </a>
           ))}
         </nav>
-        <a className="nav-cta" href="#contact">
-          Discuss a pilot <ArrowUpRight size={15} />
+        <a className="nav-cta" href="#pilot">
+          Request a pilot <ArrowUpRight size={15} />
         </a>
         <button
           className="mobile-menu-toggle"
-          aria-label={open ? "Close navigation" : "Open navigation"}
           aria-expanded={open}
           aria-controls="mobile-navigation"
+          aria-label={open ? "Close navigation" : "Open navigation"}
           onClick={() => setOpen(!open)}
         >
-          {open ? <X /> : <Menu />}
+          {open ? <X size={21} /> : <Menu size={21} />}
         </button>
         {open && (
           <nav
-            id="mobile-navigation"
             className="mobile-nav"
+            id="mobile-navigation"
             aria-label="Mobile navigation"
           >
-            {[
-              ...navigation,
-              { label: "Privacy", href: "#privacy" },
-              { label: "Discuss a pilot", href: "#contact" },
-            ].map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-                <ArrowUpRight size={18} />
-              </a>
-            ))}
+            {[...navigation, { label: "Pilot programme", href: "#pilot" }].map(
+              (n) => (
+                <a key={n.href} href={n.href} onClick={() => setOpen(false)}>
+                  {n.label}
+                  <ArrowUpRight size={16} />
+                </a>
+              ),
+            )}
           </nav>
         )}
       </div>

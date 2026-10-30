@@ -1,164 +1,202 @@
-export type ProductMode = "glasses" | "wristband" | "pendant";
+export type ProductMode = "pendant" | "wristband";
 export const site = {
   name: "NEUAURA",
-  status: "Concept / MVP in development",
+  version: "V1",
+  category: "Business Conversation Intelligence",
+  tagline: "Human Intelligence Relationship Layer.",
+  status: "Software MVP / Hardware in development",
+  hardwareStatus: "Hardware concept / Industrial design in development",
+  softwareStatus: "Interactive product concept",
+  integrationStatus: "Planned · subject to pilot validation",
+  sampleLabel: "Illustrative data — not a real customer record",
+  founder: {
+    name: "Ramesh Babu",
+    role: "Founder, NEUAURA",
+    email: "mukkararamesh2005@gmail.com",
+  },
   enquiryEndpoint: import.meta.env.VITE_ENQUIRY_ENDPOINT || "",
   socialLinks: [] as { label: string; url: string }[],
 };
+export const founderMailto = `mailto:${site.founder.email}?subject=NEUAURA%20-%20Business%20Pilot%20Enquiry`;
 export const navigation = [
-  { label: "Product", href: "#product" },
+  { label: "Platform", href: "#platform" },
   { label: "Intelligence", href: "#intelligence" },
-  { label: "For business", href: "#business" },
-  { label: "Our vision", href: "#accessibility" },
+  { label: "Hardware", href: "#hardware" },
+  { label: "Trust", href: "#trust" },
+  { label: "Founder", href: "#founder" },
 ];
-export const modes: {
-  id: ProductMode;
-  number: string;
-  label: string;
-  headline: string;
-  description: string;
-  details: string[];
-  progress: number;
-}[] = [
+export const modes = [
   {
-    id: "glasses",
+    id: "pendant" as const,
     number: "01",
-    label: "Glasses",
-    headline: "A familiar form.\nA new perspective.",
-    description:
-      "Everyday eyewear. A modular intelligence core. Designed to bring useful context closer, without getting in the way.",
-    details: [
-      "Smoked graphite frame",
-      "Integrated camera housing concept",
-      "Discreet microphone apertures",
-      "Detachable right temple core",
-    ],
+    label: "Pendant",
     progress: 0,
+    headline: "A minimal form.\nA purposeful presence.",
+    description:
+      "A future wearable concept for relevant business interactions, captured with appropriate consent.",
+    details: [
+      "Graphite titanium capsule",
+      "Satin titanium cradle",
+      "Minimal graphite chain",
+      "Tactile control and visible status",
+    ],
   },
   {
-    id: "wristband",
+    id: "wristband" as const,
     number: "02",
     label: "Wristband",
-    headline: "Your context.\nAlways at hand.",
+    progress: 0.68,
+    headline: "The same intelligence.\nA different way to wear.",
     description:
-      "The same electronic core, docked into a precision cradle. A compact configuration designed for a different rhythm.",
+      "A screenless, watch-style configuration built around the very same detachable electronic core.",
     details: [
-      "Matte graphite strap",
-      "Titanium docking cradle",
-      "The same detachable electronics",
-      "An ergonomic, considered silhouette",
+      "Matte, textured silicone strap",
+      "Precision docking concept",
+      "Minimal fastening mechanism",
+      "The identical electronic core",
     ],
-    progress: 0.53,
-  },
-  {
-    id: "pendant",
-    number: "03",
-    label: "Pendant",
-    headline: "Less to carry.\nMore to connect.",
-    description:
-      "One core. An alternative everyday wearable form. A minimal pendant attachment keeps the intelligence close.",
-    details: [
-      "Satin titanium attachment",
-      "Dark graphite chain",
-      "Unchanged electronic core",
-      "A quietly minimal design",
-    ],
-    progress: 0.81,
   },
 ];
-export const roadmap = [
+export const workflow = [
   {
-    number: "01",
-    title: "Industrial design",
+    name: "Capture",
+    title: "Begin with permission.",
     description:
-      "Exploring the wearable forms and a shared modular architecture.",
-    status: "Concept development",
+      "Approved audio or notes input from phones, laptops and compatible existing devices.",
+    example: "Customer visit · permitted input",
+    detail:
+      "The software pilot can begin with existing devices. Custom hardware is a future development direction.",
   },
   {
-    number: "02",
-    title: "Software MVP",
+    name: "Transcribe",
+    title: "Make the conversation readable.",
     description:
-      "Developing conversation processing, context and the intelligence dashboard.",
-    status: "In development",
+      "Convert permitted conversations into text for review and reference.",
+    example: "“Could you share the revised scope and product specifications?”",
+    detail:
+      "Illustrative transcript. Transcription capability and reliability require validation in the intended workflow.",
   },
   {
-    number: "03",
-    title: "Hardware integration",
+    name: "Extract",
+    title: "Bring important context into focus.",
     description:
-      "Bringing the electronic core and the software platform together.",
-    status: "Planned",
+      "Identify people, organisations, needs, objections, decisions, commitments and deadlines.",
+    example: "Need: updated proposal / Commitment: share revised scope",
+    detail:
+      "Suggested extraction is a starting point. Identity and important details must be verified by a person.",
   },
   {
-    number: "04",
-    title: "Pilot validation",
+    name: "Review",
+    title: "A human stays in the loop.",
     description:
-      "Testing actual configurations and workflows with real people.",
-    status: "Planned",
+      "Verify and correct the extracted information before it becomes a shared business record.",
+    example: "Review → correct → confirm",
+    detail:
+      "The workspace below lets you edit sample context and explicitly mark it reviewed.",
+  },
+  {
+    name: "Connect",
+    title: "Build a continuous relationship history.",
+    description:
+      "Link the interaction to confirmed people and organisation records.",
+    example: "Arjun Mehta → Northstar Components → customer meeting",
+    detail:
+      "Connect records when identity is known and confirmed. Never infer unapproved profiles.",
+  },
+  {
+    name: "Follow up",
+    title: "Make the next step deliberate.",
+    description:
+      "Prepare suggested actions and reminders for user review and confirmation.",
+    example: "Prepare the updated proposal → review → approve the next action",
+    detail:
+      "Consequential external actions require appropriate confirmation. This demo performs no external actions.",
   },
 ];
 export const useCases = [
   {
-    id: "experience",
-    name: "Customer experience",
-    title: "Hear the patterns behind the conversations.",
+    number: "01",
+    title: "Field sales",
+    label: "PRIMARY MARKET ENTRY",
+    headline: "Leave the visit.\nKeep the context.",
     description:
-      "From waiting times to service preferences, consented customer feedback could become structured themes that help teams see what matters.",
-    themes: ["Waiting times", "Product quality", "Service experience"],
-    note: "Explore recurring customer feedback",
-    task: "Review feedback with the service team",
-    observation: "Several sample conversations mention the collection queue.",
+      "Retain customer requirements, product specifications, pricing discussions, objections, decision-maker context and commercial commitments.",
+    flow: [
+      "Customer visit",
+      "Structured requirements",
+      "Sales context",
+      "Follow-up actions",
+    ],
+    note: "An updated proposal. A clarified timeline. A next step worth remembering.",
   },
   {
-    id: "operations",
-    name: "Frontline operations",
-    title: "Bring the floor closer to the people making decisions.",
+    number: "02",
+    title: "Business development",
+    label: "INITIAL FOCUS",
+    headline: "Turn a good conversation\ninto a clear next step.",
     description:
-      "A development direction for cafes, restaurants, retail and service teams: organise recurring observations so operational issues are easier to spot.",
-    themes: ["Shift handovers", "Stock availability", "Service flow"],
-    note: "Surface recurring operational observations",
-    task: "Discuss the shift handover process",
-    observation:
-      "A sample handover raises a question about product availability.",
-  },
-  {
-    id: "team",
-    name: "Team intelligence",
-    title: "Keep the context. Carry the conversation forward.",
-    description:
-      "Turn consented discussions and verbal commitments into useful summaries, decisions and proposed follow-ups that people can review.",
-    themes: ["Decisions", "Commitments", "Next steps"],
-    note: "Retain important discussion context",
-    task: "Review and assign the proposed follow-up",
-    observation:
-      "A sample team discussion includes a decision to revisit the proposal.",
-  },
-  {
-    id: "systems",
-    name: "Business systems",
-    title: "Intelligence on top of your existing systems.",
-    description:
-      "A planned connection layer between useful real-world context and the calendars, tasks, dashboards and business management systems you already use.",
-    themes: ["Business context", "Task management", "Planned connections"],
-    note: "Connect context to authorised workflows",
-    task: "Review the proposed workflow connection",
-    observation:
-      "A sample conversation suggests a follow-up for the operations board.",
+      "Organise partnership discussions, opportunities, introductions, commercial proposals, meeting outcomes and follow-up commitments.",
+    flow: [
+      "Partnership discussion",
+      "Opportunity context",
+      "Agreed outcome",
+      "Reviewed next step",
+    ],
+    note: "A potential partner. A shared opportunity. A relationship with continuity.",
   },
 ];
-// No vendor asset has been supplied. Set a path only after inspecting its node hierarchy.
+export const roadmap = [
+  {
+    title: "Define",
+    status: "INITIAL FOCUS",
+    description:
+      "One initial customer profile. One repeatable business workflow.",
+  },
+  {
+    title: "Software prototype",
+    status: "IN DEVELOPMENT",
+    description:
+      "Capture/import, transcription, extraction, review, search and follow-up.",
+  },
+  {
+    title: "Pilot",
+    status: "PLANNED VALIDATION",
+    description: "A limited B2B programme with agreed baseline measurements.",
+  },
+  {
+    title: "Refine",
+    status: "PILOT-LED",
+    description:
+      "Improve usability, reliability, extraction quality and workflow fit.",
+  },
+  {
+    title: "Wearable feasibility",
+    status: "FUTURE DIRECTION",
+    description:
+      "Evaluate audio, battery, connectivity, controls, comfort, form and cost.",
+  },
+  {
+    title: "Controlled hardware pilot",
+    status: "SUBJECT TO VALIDATION",
+    description:
+      "A limited device run when the workflow and customer value justify it.",
+  },
+];
+export const founderStatement = [
+  "Business conversations are where relationships develop, customer needs become clear and important decisions take shape.",
+  "Yet much of that information disappears into scattered notes, disconnected systems and forgotten follow-ups.",
+  "I am building NEUAURA around a simple belief: important conversations should create lasting business context.",
+  "Our goal is to combine an intelligent software layer with an evolving modular wearable ecosystem to help professionals retain what matters, connect relationships and turn conversations into meaningful action.",
+  "We are starting by validating real business workflows with early pilot partners and building the technology around actual user needs.",
+];
 export const assetManifest = {
-  source: "original-procedural-concept" as const,
+  source: "original-procedural-concept" as string,
   productionModelAvailable: false,
   assemblyUrl: null as string | null,
   nodeMapping: {
-    frame: "glasses_frame",
-    leftTemple: "left_temple",
-    rightTemple: "right_temple",
     core: "neuaura_core",
-    rail: "docking_rail",
-    alignment: "alignment_components",
-    wristband: "wristband_assembly",
     pendant: "pendant_assembly",
+    wristband: "wristband_assembly",
   },
-  status: "Original concept visualisation. Product geometry is provisional.",
+  status: "Original industrial design concept. Geometry is provisional.",
 };

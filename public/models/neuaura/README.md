@@ -1,17 +1,14 @@
-# NEUAURA production model handoff
+# NEUAURA V1 model handoff
 
-No Kimi 3D Make or other product assets were supplied with this repository.
-The website currently uses an original, provisional procedural assembly.
+The website uses original, provisional procedural geometry. No final production assembly was supplied. There are exactly two future configurations: pendant and screenless watch-style wristband, using one identical electronic core.
 
-To integrate an inspected assembly:
+To integrate inspected assets:
 
-1. Add `neuaura-modular-assembly.glb` here.
-2. Inspect its hierarchy and use metres or a consistently normalised scale.
-3. Update `assetManifest.assemblyUrl`, `productionModelAvailable`, `source` and `nodeMapping` in `src/content/site.ts`. The `source` type is intentionally explicit; update it to identify the actual supplied asset.
-4. The mapped components must be independently movable, with a common assembly coordinate system. Core submeshes (camera, button, indicator) must stay parented to the same `neuaura_core` group.
-5. Adapt the engineering anchors in `src/components/three/assembly.ts` to the actual docking coordinates. Supplied geometry is preserved; do not force a vendor model into assumed dimensions.
-6. Verify every mechanical stage and update concept labels only when appropriate.
+1. Add a GLB assembly here and inspect its hierarchy, units and docking coordinates.
+2. Set `assemblyUrl`, `productionModelAvailable`, `source` and the actual `nodeMapping` in `src/content/site.ts`.
+3. Map three independently movable groups: core, pendant assembly and wristband assembly. Keep the camera, button and indicator parented to the same core. Do not duplicate the core.
+4. Adapt anchors in `src/components/three/assembly.ts` to verified physical coordinates. Preserve the supplied geometry and proportions.
+5. Verify release, rotation, alignment, docking and the final detached-core composition, including reduced-motion tap stages.
+6. Rerun model and browser checks. Change concept labels only when supported by evidence.
 
-The loader checks for all mapped nodes. Missing nodes keep the original, labelled concept visible and emit an explicit console error. Separate vendor exports should first be assembled into these independently movable groups. No vendor mesh names or dimensions have been assumed to exist.
-
-The procedural implementation uses one electronic core per scene. The collection view shows the core docked in the wristband and empty glasses/pendant cradles. Hero and explorer canvases are independent views of the same concept; they are not claims of separate electronics.
+The loader verifies mapped nodes and retains the labelled fallback when mapping fails. Hero and explorer are separate views of the same product concept. Neither procedural geometry nor browser checks validate manufacturing feasibility.

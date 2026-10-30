@@ -1,62 +1,46 @@
 import { useContext } from "react";
-import { MotionContext } from "../../context/MotionContext";
 import { ArrowUpRight, Pause } from "lucide-react";
+import { MotionContext } from "../../context/MotionContext";
+import { founderMailto, navigation, site } from "../../content/site";
 import { Brand } from "./Navbar";
-import { navigation, site } from "../../content/site";
-
 export default function Footer() {
   const { reduced, systemReduced, setManual } = useContext(MotionContext);
   return (
     <footer className="site-footer section-wrap">
       <div className="footer-main">
-        <div>
+        <div className="footer-brand">
           <Brand />
           <p>
             Human Intelligence
             <br />
             Relationship Layer.
           </p>
+          <span>Business Conversation Intelligence.</span>
         </div>
         <nav aria-label="Footer navigation">
-          {[
-            ...navigation,
-            { label: "Accessibility", href: "#accessibility" },
-            { label: "Privacy", href: "#privacy" },
-            { label: "Contact", href: "#contact" },
-          ]
-            .filter((x) => x.label !== "Our vision")
-            .map((item) => (
-              <a key={item.label} href={item.href}>
-                {item.label}
+          {[...navigation, { label: "Pilot programme", href: "#pilot" }].map(
+            (n) => (
+              <a key={n.href} href={n.href}>
+                {n.label}
                 <ArrowUpRight size={12} />
               </a>
-            ))}
+            ),
+          )}
         </nav>
-        {site.socialLinks.length > 0 && (
-          <div className="social-links">
-            {site.socialLinks.map((link) => (
-              <a
-                key={link.url}
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {link.label}
-                <ArrowUpRight size={12} />
-              </a>
-            ))}
-          </div>
-        )}
-        <div className="footer-status">
-          <span className="status-dot" /> Concept. In development.
-          <span>Thoughtfully building what comes next.</span>
+        <div className="footer-contact">
+          <span>FOUNDER</span>
+          <strong>{site.founder.name}</strong>
+          <a href={founderMailto}>
+            {site.founder.email}
+            <ArrowUpRight size={13} />
+          </a>
           <button
             className="motion-toggle"
-            aria-pressed={reduced}
             disabled={systemReduced}
+            aria-pressed={reduced}
             onClick={() => setManual(!reduced)}
           >
-            <Pause size={11} />
+            <Pause size={12} />
             {systemReduced
               ? "Reduced motion (system)"
               : reduced
@@ -65,9 +49,13 @@ export default function Footer() {
           </button>
         </div>
       </div>
+      <p className="footer-legal">
+        NEUAURA — Product concepts and capabilities are subject to development
+        and validation.
+      </p>
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} NEUAURA</span>
-        <span>ONE CORE. THREE WAYS TO WEAR.</span>
+        <span>PERMISSION. CONTEXT. REVIEW. FOLLOW-THROUGH.</span>
         <a href="#home">BACK TO TOP ↑</a>
       </div>
     </footer>

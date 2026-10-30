@@ -34,7 +34,7 @@ class WebGLBoundary extends Component<
   }
 }
 
-export function ProductVisual({ mode = "glasses", ...props }: Props) {
+export function ProductVisual({ mode = "pendant", ...props }: Props) {
   const wrapper = useRef<HTMLDivElement>(null);
   const [entered, setEntered] = useState(false);
   const [ready, setReady] = useState(false);
@@ -45,14 +45,36 @@ export function ProductVisual({ mode = "glasses", ...props }: Props) {
   }, [onReady]);
   const fallback = (
     <div className="visual-fallback">
-      {props.variant === "reveal" ? (
+      {props.variant === "reveal" || props.variant === "hero" ? (
         <div className="fallback-collection">
-          {(["glasses", "wristband", "pendant"] as const).map((form) => (
-            <ProductDrawing
-              key={form}
-              mode={form}
-              includeCore={form === "wristband"}
+          <svg
+            className="fallback-core"
+            viewBox="0 0 80 180"
+            role="img"
+            aria-label="Single shared electronic core concept"
+          >
+            <rect
+              x="13"
+              y="8"
+              width="54"
+              height="164"
+              rx="24"
+              fill="#26343d"
+              stroke="#aeb8c1"
+              strokeWidth="3"
             />
+            <circle
+              cx="40"
+              cy="36"
+              r="8"
+              fill="#0a1621"
+              stroke="#6b8293"
+              strokeWidth="2"
+            />
+            <path d="M34 142h12" stroke="#66e0ce" strokeWidth="2" />
+          </svg>
+          {(["pendant", "wristband"] as const).map((form) => (
+            <ProductDrawing key={form} mode={form} includeCore={false} />
           ))}
         </div>
       ) : (

@@ -1,84 +1,66 @@
-# NEUAURA — modular intelligence experience
+# NEUAURA V1 — Business Conversation Intelligence
 
-A responsive React 19 / Vite / TypeScript product experience, using React Three Fiber 9, Three.js and GSAP ScrollTrigger. The repository was empty when inspected; no existing application, product models or founder-supplied transformation video were available.
+A software-first business website and working, fictional product demonstration for field sales and business development. Built with React 19, Vite, TypeScript, React Three Fiber, Three.js and GSAP. The supplied V1 brief is the implementation source; the separately named primary overview and final production models were not available in the connected sources.
 
-## Run
+## Run and validate
 
 ```sh
 npm ci
 npm run dev
-```
-
-```sh
-npm run lint
 npm run typecheck
+npm run lint
 npm run test:model
+npm run test:demo
 npm run build
-npm run preview
 ```
 
-Node 22.12 or newer is recommended. `dist/` is the deployable static output. A server is intentionally unnecessary for the unconnected enquiry preview.
+`dist/` is the static deployment. The existing Sites identity is preserved in `.openai/hosting.json`. Fonts are self-hosted with their SIL licences.
 
-## What works
+## Implemented experience
 
-- Original graphite / titanium identity, local variable fonts and responsive editorial sections.
-- Interactive PBR product geometry, drag rotation, reset, automatic studio turn and an expanded viewer with focus management and Escape dismissal.
-- Desktop scroll sequence: eyewear → linear core release → separated components → wristband docking → pendant docking → collection.
-- Independent wearing-configuration and stage selectors. Mobile and reduced-motion experiences use tap-driven stages.
-- Exactly one reusable electronic core in each assembly. Its camera, button, indicator, dimensions and meshes remain unchanged. In the collection, the core is docked in the wristband and the other two cradles are empty.
-- Keyboard-operated intelligence and business tabs, a clearly labelled illustrative dashboard, an interactive sample follow-up, accessibility directions and privacy disclosures.
-- Editable content, roadmap, model mapping, statuses and social links in `src/content/site.ts`.
-- Native required-field/email validation, trimmed input checks, a truthful unsent state and downloadable enquiry text.
-- System reduced-motion preference plus an explicit footer control, lazy 3D loading, capped device pixel ratio, viewport-based render pausing and GPU resource disposal.
-- Semantic headings, focus styles, labelled controls, skip navigation, page metadata, a canonical URL, PNG social card and favicon.
+- Fourteen sections: business hero, business problem, six-stage workflow, nine-entity relationship graph, software workspace, business use cases, hardware explorer, integration architecture, trust demonstration, six-phase roadmap, pilot programme, founder, brand reveal and footer.
+- Working workspace tabs: Overview, Interactions, People, Organisations, Commitments, Follow-ups and Search. Records and transcripts are inspectable; context can be edited and marked reviewed. Source review gates commitment confirmation, sharing and follow-up approval. Sharing/actions require a separate, explicit simulation confirmation.
+- Search reads the fixture records and current edits. It includes four example queries, relationship context, empty results and links to source records. Filters, reset and fictional-data export work locally.
+- Consent controls simulate start, pause, resume and stop. There is no microphone access. Context review and explicit sharing approval remain separate steps.
+- Original, provisional 3D geometry: one electronic core, a pendant and a screenless watch-style wristband. The mechanical sequence releases the core, aligns it with the wrist cradle and finishes with one detached core between two empty cradles. No geometry is duplicated or morphed.
+- Drag rotation, reset, expansion, tap-based mobile stages and reduced-motion mode. The canvas is lazy-loaded, pauses offscreen, caps resolution and disposes GPU resources. SVG fallback illustrations preserve the two-configuration concept.
+- Ramesh Babu's supplied founder note, selectable email and real `mailto:` links. No invented biography or portrait.
 
-## Product asset status
+## Honest capability boundaries
 
-**All product geometry is an original, provisional concept fallback, not an inspected Kimi model or validated hardware design.** No third-party product imagery, geometry, logos or footage is used. The gallery uses original vector illustrations and the main product views use actual interactive geometry.
+This is a browser-only demonstration with two entirely fictional interactions. Changes reset on reload. No production AI, recording, CRM, integration, identity resolution, remote storage, email sending or automatic commercial decisions are performed. Integration architecture, pilot measurements and future hardware are labelled as planned or in development. Product geometry does not establish physical feasibility.
 
-Add inspected assets in `public/models/neuaura/`, then follow its README. The central manifest and GLTF loader support independently mapped assembly nodes. Actual asset dimensions, origin placement and docking anchors must be verified before replacing the concept; no vendor hierarchy is assumed.
+## Pilot enquiry delivery
 
-No device specifications, certifications, accuracy claims, launch dates, customer results, partnerships or live business integrations are claimed. The intelligence dashboard and communication workflows are clearly labelled concepts.
+Seven required fields are validated: name, work email, organisation, role, number of potential users, business workflow and message. By default the form prepares an **unsent local draft**. The visitor can download it or open a populated email draft to the founder and send it themselves.
 
-## Enquiry delivery
-
-By default, **no enquiry is sent, persisted, or reported as received**. The visitor can prepare and download a local copy. This is the brief's permitted integration-ready demo state.
-
-To connect a real service, copy `.env.example` to `.env.local` and set `VITE_ENQUIRY_ENDPOINT` to a public HTTPS endpoint. It receives:
+To connect delivery, copy `.env.example` to `.env.local` and configure a public HTTPS `VITE_ENQUIRY_ENDPOINT`. It receives JSON:
 
 ```json
 {
   "name": "string",
   "email": "string",
   "organisation": "string",
-  "interest": "string",
+  "role": "string",
+  "users": 5,
+  "workflow": "string",
   "message": "string"
 }
 ```
 
-The adapter reports acceptance only for a successful HTTP response containing `{ "accepted": true }`. Implement server validation, origin configuration, spam/rate limiting and your actual storage/delivery policy in that service. Never expose provider credentials through a `VITE_` variable. A twelve-second timeout or an unconfirmed response leaves the details available for retry/download.
+The adapter reports receipt only after HTTP success and `{"accepted":true}`. The service must implement validation, origin configuration, rate limits and actual delivery/storage. Provider credentials must stay on the server. Timeout or unconfirmed receipt retains the draft for retry or download.
 
-## Verification
+## Content and maintenance
 
-Model verification exercises 101 poses and asserts stable core identity, unchanged child mesh identities, fixed dimensions, linear initial extraction, docking anchors and visible component objects throughout the sequence.
+- `src/content/site.ts`: brand, copy, founder, statuses, roadmap, two configurations and asset mapping.
+- `src/content/demo.ts`: clearly fictional source transcripts, relationships, commitments and search examples.
+- `src/lib/demo.ts`: search and review gate.
+- `src/components/dashboard/`: workspace and confirmation flows.
+- `src/components/three/`: shared-core geometry, mechanical poses, lighting and lifecycle.
+- `src/components/hardware/`: scroll/tap explorer.
+- `src/components/trust/`: conceptual consent and sharing controls.
+- `src/components/pilot/` and `src/lib/enquiry.ts`: validated draft and optional delivery adapter.
+- `public/models/neuaura/README.md`: model replacement contract.
+- `docs/references.md`: design references and source boundaries.
 
-Browser checks during development covered desktop (1440 × 1000) and mobile (390 × 844), hero configuration selection, mobile navigation, explorer stages/reset/expansion, Escape dismissal, intelligence tabs, business tabs/sample task, accessibility direction, privacy disclosure, native form validation, truthful demo result, enquiry download and reduced-motion controls. All anchor targets resolve; mobile rendered controls and headings stay inside the viewport. Browser console errors were checked and resolved. Verification screenshots are kept in the ignored `artifacts/` directory.
-
-Build/type/lint and model checks should be rerun after changing assets or animation anchors. Physical fit, hardware feasibility and real service delivery require the actual supplied assets and configured service; browser validation is not hardware validation.
-
-## Structure
-
-```text
-src/content/site.ts             Editable copy, roadmap, configuration and assets
-src/components/three/           PBR assembly, poses, lighting and canvas lifecycle
-src/components/product/         Scroll/tap explorer, detail gallery and final reveal
-src/components/intelligence/    Workflow, business concepts and sample dashboard
-src/components/accessibility/  Communication vision and conceptual pathways
-src/components/privacy/        Privacy principles and development roadmap
-src/components/contact/        Accessible enquiry interface
-src/lib/enquiry.ts              Delivery adapter and local download
-scripts/verify-model.mjs        Shared-core invariant checks
-.openai/hosting.json            Private Sites identity and static output
-```
-
-Reference study is recorded in `docs/references.md`. DM Sans and Manrope are self-hosted under their included SIL Open Font Licenses in `public/fonts/`.
+Model checks verify 101 poses, one stable core, unchanged sensors and geometry, linear release, docking anchors and visible components. Demo checks cover queries, current edits, selected relationships, completion and the review gate. Browser verification covers the working flows, responsive layouts and reduced motion; screenshots are stored in the ignored `artifacts/` directory.

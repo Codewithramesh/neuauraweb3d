@@ -9,7 +9,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "typecheck": "tsc -b --pretty false",
     "test:model": "node scripts/verify-model.mjs",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:demo": "node scripts/verify-demo.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",
