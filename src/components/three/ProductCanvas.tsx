@@ -224,6 +224,7 @@ export default function ProductCanvas(props: Props) {
   const [visible, setVisible] = useState(true);
   const reduce = useReducedMotion();
   const mobile = useMediaQuery("(max-width: 900px)");
+  const phone = useMediaQuery("(max-width: 700px)");
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
@@ -240,6 +241,7 @@ export default function ProductCanvas(props: Props) {
       role="img"
     >
       <Canvas
+        key={phone ? "phone" : mobile ? "tablet" : "desktop"}
         frameloop={!visible ? "never" : reduce ? "demand" : "always"}
         dpr={mobile ? [1, 1.35] : [1, 1.75]}
         camera={{
@@ -249,9 +251,18 @@ export default function ProductCanvas(props: Props) {
                 ? [1, 3, 12]
                 : [0.8, 2.6, 10]
               : mobile
-                ? [5, 3.5, 11.2]
+                ? phone
+                  ? [5, 3.5, 11.2]
+                  : [5, 3.5, 13.2]
                 : [6, 3.8, 9.1],
-          fov: props.variant === "reveal" ? (mobile ? 44 : 28) : 38,
+          fov:
+            props.variant === "reveal"
+              ? mobile
+                ? 44
+                : 28
+              : mobile && !phone
+                ? 44
+                : 38,
           near: 0.1,
           far: 100,
         }}
